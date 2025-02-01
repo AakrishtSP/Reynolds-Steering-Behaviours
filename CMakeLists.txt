@@ -18,8 +18,6 @@ file(GLOB_RECURSE SOURCES
 # Add GLM, GLFW, and GLEW as subdirectories (assuming they have CMake support)
 add_subdirectory(external/glm)
 add_subdirectory(external/glfw)
-# For GLEW, ensure that its CMake build (or a proper CMakeLists.txt) is available
-add_subdirectory(external/glew/build/cmake)
 
 # Create main executable
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -29,13 +27,22 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         src
         ${CMAKE_SOURCE_DIR}/external/glm
         ${CMAKE_SOURCE_DIR}/external/glfw/include
-        ${CMAKE_SOURCE_DIR}/external/glew/include
+        ${CMAKE_SOURCE_DIR}/external/glad/include
 )
 
 # (Optional) Precompiled header support if available
 if(EXISTS "${CMAKE_SOURCE_DIR}/src/pch.h")
     target_precompile_headers(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/src/pch.h")
 endif()
+
+#--- Manually add GLAD as a static library ---
+# Define the GLAD root directory
+set(GLAD_DIR ${CMAKE_SOURCE_DIR}/external/glad)
+
+# Create the glad library target
+add_library(glad STATIC ${GLAD_DIR}/src/gl.c)
+target_include_directories(glad PUBLIC ${GLAD_DIR}/include)
+
 
 # --- Manually add Dear ImGui as a static library ---
 # Define the ImGui root directory
@@ -57,17 +64,18 @@ set(IMGUI_SOURCES
 # Create the imgui library target and set its include directories
 add_library(imgui STATIC ${IMGUI_SOURCES})
 target_include_directories(imgui PUBLIC
+        ${CMAKE_SOURCE_DIR}/external/glfw/include
+        ${CMAKE_SOURCE_DIR}/external/glad/include
         ${IMGUI_DIR}
         ${IMGUI_DIR}/backends
 )
-# Tell ImGui’s OpenGL3 backend to use GLEW as the loader
-target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW)
+# Tell ImGui’s OpenGL3 backend to use GLAD as the loader
+target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
 
 # --- Link all dependencies to the main executable ---
 target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw           # from external/glfw
-        GLEW::GLEW     # from external/glew (assuming it provides a target)
-        OpenGL::GL     # for OpenGL functions
+        glad           # our manually added GLAD library
         glm            # from external/glm
         imgui          # our manually added ImGui library
 )
