@@ -14,15 +14,76 @@ static void key_callback(GLFWwindow* window, const int key, int scancode, const 
         glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
+void APIENTRY OpenGLDebugMessageCallback(const GLenum source, const GLenum type, GLuint id, const GLenum severity,
+                                         GLsizei length, const GLchar* message, const void* userParam)
+{
+    std::cerr << "🔷 [OpenGL Debug Message] 🔷\n";
+    std::cerr << "Message: " << message << std::endl;
+    std::cerr << "Source: ";
+
+    switch (source)
+    {
+        case GL_DEBUG_SOURCE_API:             std::cerr << "API"; break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   std::cerr << "Window System"; break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER: std::cerr << "Shader Compiler"; break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:     std::cerr << "Third Party"; break;
+        case GL_DEBUG_SOURCE_APPLICATION:     std::cerr << "Application"; break;
+        case GL_DEBUG_SOURCE_OTHER:           std::cerr << "Other"; break;
+    default: std::cerr << "Unknown"; break;
+    }
+    std::cerr << "\nType: ";
+
+    switch (type)
+    {
+        case GL_DEBUG_TYPE_ERROR:               std::cerr << "Error"; break;
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: std::cerr << "Deprecated Behavior"; break;
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  std::cerr << "Undefined Behavior"; break;
+        case GL_DEBUG_TYPE_PORTABILITY:         std::cerr << "Portability"; break;
+        case GL_DEBUG_TYPE_PERFORMANCE:         std::cerr << "Performance"; break;
+        case GL_DEBUG_TYPE_MARKER:              std::cerr << "Marker"; break;
+        case GL_DEBUG_TYPE_PUSH_GROUP:          std::cerr << "Push Group"; break;
+        case GL_DEBUG_TYPE_POP_GROUP:           std::cerr << "Pop Group"; break;
+        case GL_DEBUG_TYPE_OTHER:               std::cerr << "Other"; break;
+    default: std::cerr << "Unknown"; break;
+    }
+    std::cerr << "\nSeverity: ";
+
+    switch (severity)
+    {
+        case GL_DEBUG_SEVERITY_HIGH:         std::cerr << "🔴 High"; break;
+        case GL_DEBUG_SEVERITY_MEDIUM:       std::cerr << "🟠 Medium"; break;
+        case GL_DEBUG_SEVERITY_LOW:          std::cerr << "🟡 Low"; break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION: std::cerr << "🔵 Notification"; break;
+    default: std::cerr << "Unknown"; break;
+    }
+    std::cerr << "\n----------------------------------------\n";
+}
+
+void EnableOpenGLDebugging()
+{
+    GLint flags;
+    glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+    if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
+    {
+        std::cout << "✅ OpenGL Debug Output Enabled\n";
+
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        glDebugMessageCallback(OpenGLDebugMessageCallback, nullptr);
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+    }
+    else
+    {
+        std::cout << "⚠ OpenGL Debug Context Not Available\n";
+    }
+}
 
 Window::Window(): m_window(nullptr), m_width(0), m_height(0)
 {
 }
 
 Window::~Window()
-{
-    shutdown();
-}
+= default;
 
 void Window::init()
 {
@@ -37,6 +98,7 @@ void Window::init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // ✅ Request Debug Context
 
     m_window = glfwCreateWindow(640, 480, "Reynolds Steering Behaviours", nullptr, nullptr);
     if (!m_window)
@@ -57,6 +119,8 @@ void Window::init()
     std::cout << "Loaded OpenGL" << GLAD_VERSION_MAJOR(version)<<"."<< GLAD_VERSION_MINOR(version) << std::endl;
 
     glfwSwapInterval(1); // Enable vsync
+
+    EnableOpenGLDebugging();
 }
 
 void Window::updateStart()

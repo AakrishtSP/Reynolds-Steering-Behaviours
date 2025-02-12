@@ -1,16 +1,20 @@
 // src/Window/ImguiWindow.h
 #pragma once
 #include "imgui.h"
+#include "Window.h"
 
 class ImguiWindow {
 public:
     ImguiWindow();
     ~ImguiWindow();
 
-    void init();
-    void updateStart();
+    void init(Window* window);
+    void updateStart() const;
     void updateEnd() const;
-    void shutdown() const;
+    static void shutdown();
+
+    [[nodiscard]] ImGuiIO* getIO() const { return m_io; }
 private:
-   ImGuiIO& io;
+    ImGuiIO* m_io;
+    Window* m_window;
 };

@@ -16,6 +16,12 @@ public:
 
     void shutdown() const;
 
+    [[nodiscard]] GLFWwindow* getWindow() const { return m_window; }
+
+    [[nodiscard]] int getWidth() const { return m_width; }
+
+    [[nodiscard]] int getHeight() const { return m_height; }
+
 private:
     GLFWwindow* m_window;
     int m_width;

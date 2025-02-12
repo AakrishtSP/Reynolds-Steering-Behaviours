@@ -2,6 +2,7 @@
 #pragma once
 #include "IApplication.h"
 #include "Window/Window.h"
+#include "Window/ImguiWindow.h"
 
 class ApplicationManager {
 public:
@@ -9,12 +10,14 @@ public:
     ~ApplicationManager();
 
     void init();
-    void update() const;
+    void update();
     void shutdown() const;
 
-    std::unique_ptr<Window>& getWindow() { return m_Window; }
+    [[nodiscard]] Window* getWindow() const { return m_Window; }
 
 private:
-    std::unique_ptr<IApplication> m_Application;
-    std::unique_ptr<Window> m_Window;
+    bool m_Running = true;
+    IApplication* m_Application;
+    Window* m_Window{};
+    ImguiWindow* m_ImguiWindow{};
 };

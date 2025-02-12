@@ -42,7 +42,7 @@ GLuint compileShader(GLenum type, const char* source) {
     return shader;
 }
 
-int main() {
+int mainl() {
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW!" << std::endl;
         return -1;
