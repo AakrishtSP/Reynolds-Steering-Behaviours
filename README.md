@@ -25,6 +25,17 @@ git submodule update --init --recursive
 - GLFW, GLM, DearImGui, glad (included as submodules)
 
 ### Steps to Build
+Prerequisite:
+Install dependencies
+Ubuntu:
+```sh
+sudo apt install build-essential wayland-protocols libwayland-dev libxkbcommon-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev cmake
+```
+
+ArchLinux:
+```sh
+sudo pacman -S base-devel libxrandr libxinerama libxcursor libxi mesa cmake
+```
 
 1. Navigate to the project directory:
    ```sh
