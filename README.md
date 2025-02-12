@@ -23,7 +23,6 @@ git submodule update --init --recursive
 - A C++ compiler with C++17 support
 - OpenGL (typically provided by your system or graphics drivers)
 - GLFW, GLM, DearImGui (included as submodules)
-- Optional: GLEW (if needed for additional OpenGL functionality)
 
 ### Steps to Build
 

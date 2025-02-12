@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.30)
-project(GraphicsProject)
+project(ReynoldsSteering)
 
 # Set C++ standard and output directories
 set(CMAKE_CXX_STANDARD 17)
