@@ -19,10 +19,10 @@ git submodule update --init --recursive
 ## Building with CMake
 
 ### Requirements
-- CMake (>=3.10 recommended)
+- CMake (>=3.30 recommended)
 - A C++ compiler with C++17 support
 - OpenGL (typically provided by your system or graphics drivers)
-- GLFW, GLM, DearImGui (included as submodules)
+- GLFW, GLM, DearImGui, glad (included as submodules)
 
 ### Steps to Build
 
