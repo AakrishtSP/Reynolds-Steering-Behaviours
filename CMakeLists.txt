@@ -31,9 +31,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 # (Optional) Precompiled header support if available
-if(EXISTS "${CMAKE_SOURCE_DIR}/src/pch.h")
+if (EXISTS "${CMAKE_SOURCE_DIR}/src/pch.h")
     target_precompile_headers(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/src/pch.h")
-endif()
+endif ()
 
 #--- Manually add GLAD as a static library ---
 # Define the GLAD root directory
@@ -72,6 +72,11 @@ target_include_directories(imgui PUBLIC
 # Tell ImGui’s OpenGL3 backend to use GLAD as the loader
 target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
 
+target_compile_definitions(${PROJECT_NAME}
+        PUBLIC GLFW_INCLUDE_NONE
+        PUBLIC GLAD_GL_IMPLEMENTATION
+)
+
 # --- Link all dependencies to the main executable ---
 target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw           # from external/glfw
@@ -82,7 +87,15 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 # Optionally, set custom output paths per target
 set_target_properties(${PROJECT_NAME} PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin/${PROJECT_NAME}
-        ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/obj/${PROJECT_NAME}
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib/${PROJECT_NAME}
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin
+        ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/obj
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib
+)
+
+
+# Copy assets to the build directory after building Examples
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/assets
+        ${CMAKE_BINARY_DIR}/build/bin/assets
 )
