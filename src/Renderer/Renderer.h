@@ -9,5 +9,4 @@ public:
     static void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader);
     static void Clear();
     static void SetClearColor(float r, float g, float b, float a);
-
 };
