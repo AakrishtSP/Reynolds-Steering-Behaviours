@@ -9,9 +9,7 @@
 BoidsManager::BoidsManager()
 {
     m_Draw.init();
-    addBoid(std::make_unique<Agent>());
     m_translation = glm::vec2(0.0f, 0.0f);
-
 }
 
 BoidsManager::~BoidsManager()
@@ -34,6 +32,7 @@ void BoidsManager::update()
     if (!m_boid.empty())
     {
         m_Draw.draw(m_boid);
+        m_UpdateStates.updateWander(m_boid);
     }
 }
 
