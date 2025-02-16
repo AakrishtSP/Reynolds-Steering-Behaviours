@@ -1,0 +1,3 @@
+Boids ko protoype and then for now agent
+Storing ko am timi garxu
+

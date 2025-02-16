@@ -18,7 +18,6 @@ void ApplicationManager::init()
     m_ImguiWindow->init(m_Window);
 
     m_Application->init();
-    update();
 }
 
 void ApplicationManager::update()
