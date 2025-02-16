@@ -145,3 +145,12 @@ readability-static-definition-in-anonymous-namespace,
 readability-string-compare,
 readability-uniqueptr-delete-release,
 readability-use-anyofallof'
+
+# Promote bug-prone and core guidelines warnings to errors.
+WarningsAsErrors: 'bugprone-.*|cppcoreguidelines-.*'
+
+# Only run checks on files within the src/ directory.
+HeaderFilterRegex: 'src/.*'
+
+# Use the formatting style defined in your .clang-format file, if available.
+FormatStyle: file

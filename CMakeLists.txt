@@ -1,6 +1,19 @@
 cmake_minimum_required(VERSION 3.30)
 project(ReynoldsSteering)
 
+
+# Enforce clang-tidy checks if available
+find_program(CLANG_TIDY_EXE NAMES clang-tidy)
+if(CLANG_TIDY_EXE)
+    message(STATUS "Found clang-tidy: ${CLANG_TIDY_EXE}")
+    # Option 1: Let clang-tidy automatically pick up the .clang-tidy file
+    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-header-filter=^${CMAKE_SOURCE_DIR}/src/.*")
+
+    # Option 2: Force clang-tidy to use the .clang-tidy file in the project root.
+#     set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-config=file:${CMAKE_SOURCE_DIR}/.clang-tidy")
+endif()
+
+
 # Set C++ standard and output directories
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
