@@ -24,7 +24,10 @@ public:
     void SetUniform1iv(const std::string& name, int *value, int count);
     void SetUniform1f(const std::string& name, float value);
     void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
+    void SetUniform3f(const std::string& name, float v0, float v1, float v2);
     void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
+    void SetUniformMat3f(const std::string& name, const glm::mat3& matrix);
+
 
 private:
     static ShaderProgramSource ParseShader(const std::string& vertexShader, const std::string& fragmentShader);

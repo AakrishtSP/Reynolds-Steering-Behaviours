@@ -11,7 +11,7 @@ IndexBuffer::IndexBuffer(const unsigned int* data, const unsigned int count, con
     : m_Count(count), m_BufferSize(count * sizeof(unsigned int)), m_bIsDynamic(isDynamic)
 {
     assert(sizeof(unsigned int) == sizeof(GLuint));
-    assert(data != nullptr && count != 0);
+    // assert(data != nullptr && count != 0);
 
 
     glGenBuffers(1, &m_RendererID);
@@ -48,7 +48,7 @@ void IndexBuffer::EditData(const unsigned int* data, const unsigned int count, c
     if (!m_bIsDynamic)
         std::cerr << "Warning: Trying to edit a static IndexBuffer!: " << m_RendererID << std::endl;
 
-    assert(data != nullptr && count == 0);
+    assert(data != nullptr && count != 0);
     Bind();
 
     const unsigned int newCount = std::max(count + offset, m_Count);

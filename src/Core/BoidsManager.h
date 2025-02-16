@@ -3,6 +3,7 @@
 
 #include "States/States.h"
 #include "Boids/Boid.h"
+#include "Renderer/Draw.h"
 
 #include <vector>
 #include <memory>
@@ -18,5 +19,7 @@ public:
    void addBoid(std::unique_ptr<Boid> boid);
 
  private:
-   std::vector<std::unique_ptr<Boid>> m_boid;
+    std::vector<std::unique_ptr<Boid>> m_boid;
+    Draw m_Draw;
+    glm::vec2 m_translation{};
 };

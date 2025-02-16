@@ -99,8 +99,9 @@ void Window::init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // ✅ Request Debug Context
+    glfwWindowHint(GLFW_FLOATING, GLFW_TRUE); // Set the window to be floating
 
-    m_window = glfwCreateWindow(640, 480, "Reynolds Steering Behaviours", nullptr, nullptr);
+    m_window = glfwCreateWindow(1280, 720, "Reynolds Steering Behaviours", nullptr, nullptr);
     if (!m_window)
     {
         fprintf(stderr, "Failed to create window\n");

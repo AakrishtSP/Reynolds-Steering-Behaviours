@@ -1,2 +1,43 @@
 // src/Core/BoidsManager.cpp
 #include "BoidsManager.h"
+
+#include "Renderer/Draw.h"
+#include "Core/Boids/Agent.h"
+#include "imgui.h"
+#include "glm/glm.hpp"
+
+BoidsManager::BoidsManager()
+{
+    m_Draw.init();
+    addBoid(std::make_unique<Agent>());
+    m_translation = glm::vec2(0.0f, 0.0f);
+
+}
+
+BoidsManager::~BoidsManager()
+= default;
+
+void BoidsManager::update()
+{
+    //Do something here
+
+
+    //yo vanda tala kolai abstract garda pani hunxa
+
+    // Yo translation chai screen ko hai not of boids
+    ImGui::Begin("Transform");
+    ImGui::SliderFloat("Transform X", &m_translation.x, -640.0f, 640.0f);
+    ImGui::SliderFloat("Transform Y", &m_translation.y, -360.0f, 360.0f);
+    ImGui::End();
+
+    m_Draw.setTranslation(m_translation);
+    if (!m_boid.empty())
+    {
+        m_Draw.draw(m_boid);
+    }
+}
+
+void BoidsManager::addBoid(std::unique_ptr<Boid> boid)
+{
+    m_boid.push_back(std::move(boid));
+}

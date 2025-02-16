@@ -8,7 +8,7 @@
 
 class Boid {
 public:
-    explicit Boid(std::string  name="Boid") : m_name(std::move(name)) {};
+    explicit Boid(std::string  name="Boid") : m_name(std::move(name)), m_position(0,0), m_facingDirection(1,0), m_velocity(0,0), m_size(30) {};
     virtual ~Boid() = default;
     virtual void update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>)=0;
 
@@ -18,19 +18,21 @@ public:
     [[nodiscard]] const glm::vec2& getAcceleration() const { return m_acceleration; }
     [[nodiscard]] const std::string& getName() const { return m_name; }
     [[nodiscard]] const std::vector<glm::vec2>& getStates() const { return m_states; }
-    [[nodiscard]] size_t getSize() const { return m_size; }
+    [[nodiscard]] float getSize() const { return m_size; }
+    [[nodiscard]] glm::vec2 getFacingDirection() const { return m_facingDirection; }
 
     //Setters
     void setPosition(const glm::vec2& position) { m_position = position; }
     void setVelocity(const glm::vec2& velocity) { m_velocity = velocity; }
     void setAcceleration(const glm::vec2& acceleration) { m_acceleration = acceleration; }
-    void setSize(size_t size) { m_size = size; }
+    void setSize(const float size) { m_size = size; }
 
 private:
-        size_t m_size{};
-        glm::vec2 m_position{};
-        glm::vec2 m_velocity{};
+        std::string m_name{};
+        glm::vec2 m_position;
+        glm::vec2 m_facingDirection;
+        glm::vec2 m_velocity;
         glm::vec2 m_acceleration{};
         std::vector<glm::vec2> m_states;
-        std::string m_name{};
+        float m_size;
 };

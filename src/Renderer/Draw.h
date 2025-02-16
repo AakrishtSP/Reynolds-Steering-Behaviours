@@ -3,10 +3,29 @@
 #include "Core/Boids/Boid.h"
 #include <vector>
 #include <memory>
+#include "VertexBuffer.h"
+#include "VertexArray.h"
+#include "IndexBuffer.h"
+#include "Shader.h"
+#include "glm/glm.hpp"
 
 class Draw {
 public:
-    static void draw(std::vector<std::shared_ptr<Boid>> boids);
+    Draw();
+    ~Draw();
+    void init();
+    static void shutdown();
+    void draw(const std::vector<std::unique_ptr<Boid>>& boids);
     static void clear();
     static void setClearColor(float r, float g, float b, float a);
+    void setTranslation(const glm::vec2& translation);
+
+private:
+    std::unique_ptr<VertexBuffer> m_VertexBuffer;
+    std::unique_ptr<VertexArray> m_VertexArray;
+    std::unique_ptr<IndexBuffer> m_IndexBuffer;
+    std::unique_ptr<Shader> m_Shader;
+    glm::mat4 m_View{};
+    glm::mat4 m_Projection{};
+    glm::vec3 m_translation{};
 };
