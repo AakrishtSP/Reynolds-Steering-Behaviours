@@ -19,8 +19,12 @@ public:
     static void clear();
     static void setClearColor(float r, float g, float b, float a);
     void setTranslation(const glm::vec2& translation);
+    void drawCircle(const glm::vec2& position, float radius) const;
 
 private:
+    void initUnitCircle();
+
+
     std::unique_ptr<VertexBuffer> m_VertexBuffer;
     std::unique_ptr<VertexArray> m_VertexArray;
     std::unique_ptr<IndexBuffer> m_IndexBuffer;
@@ -28,4 +32,9 @@ private:
     glm::mat4 m_View{};
     glm::mat4 m_Projection{};
     glm::vec3 m_translation{};
+
+    std::unique_ptr<VertexArray> m_UnitCircleVAO;
+    std::unique_ptr<VertexBuffer> m_UnitCircleVBO;
+    std::unique_ptr<Shader> m_UnitCircleShader;
+    int m_UnitCircleSegmentCount{};
 };

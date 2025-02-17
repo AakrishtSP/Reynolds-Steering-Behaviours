@@ -18,6 +18,8 @@ public:
 
    void addBoid(std::unique_ptr<Boid> boid);
 
+    Draw& getDraw() { return m_Draw; }
+
    std::vector<std::unique_ptr<Boid>> &getBoids() { return m_boid; }
 
 private:
