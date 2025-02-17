@@ -18,6 +18,20 @@ Draw::Draw()
 Draw::~Draw()
 = default;
 
+struct VerticesInfo
+{
+    float x;
+    float y;
+    float z;
+};
+struct BoidVertices
+{
+    VerticesInfo front_tip;
+    VerticesInfo front_left;
+    VerticesInfo front_right;
+    VerticesInfo back_tip;
+};
+
 void Draw::init()
 {
     m_VertexArray = std::make_unique<VertexArray>();
@@ -27,7 +41,10 @@ void Draw::init()
     m_Shader = std::make_unique<Shader>("assets/shaders/boid.glsl.vert", "assets/shaders/boid.glsl.frag");
 
     m_Projection = glm::ortho(-640.0f, 640.0f, -360.0f, 360.0f);
-    // m_View = glm::translate(glm::mat3(1.0f), glm::vec2(0.0f, 0.0f));
+
+    VertexBufferLayout layout;
+    layout.Push<float>(3);
+    m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 }
 
 void Draw::shutdown()
@@ -45,49 +62,64 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids)
     m_IndexBuffer->Bind();
     m_Shader->Bind();
 
-    const size_t size = 9 * boids.size();
-
-    auto* vertices = new float[size];
+    auto* boidVertices = new BoidVertices[boids.size()];
+    auto* indices = new unsigned int[boids.size() * 6];
 
     for (size_t i = 0; i < boids.size(); i++)
     {
-        const glm::vec2 facingdir = glm::normalize(boids[i]->getFacingDirection());
-        const glm::vec2 perp(-facingdir.y, facingdir.x); // Perpendicular direction
-        const glm::vec2 triangleSize = facingdir * (boids[i]->getSize());
-        const glm::vec2 wingOffset = perp * boids[i]->getSize() * 0.2f;
+        const glm::vec2 facingDir = glm::normalize(boids[i]->getFacingDirection());
+        const glm::vec2 perp(-facingDir.y, facingDir.x);
+        const float size = boids[i]->getSize();
         const glm::vec2 position = boids[i]->getPosition();
 
-        vertices[9*i + 0] = position.x + triangleSize.x;
-        vertices[9*i + 1] = position.y + triangleSize.y;
-        vertices[9 * i + 2] = 0.0f;
+        // Define proportions
+        const float bodyLength = size * 1.0f;
+        const float wingWidth = size * 0.1f;
+        const float tailLength = size * 0.25f;
 
-        vertices[9*i + 3] = position.x - triangleSize.x + wingOffset.x;
-        vertices[9*i + 4] = position.y - triangleSize.y + wingOffset.y;
-        vertices[9 * i + 5] = 0.0f;
+        // A multiplier to exaggerate the wing spread for a caret wing look.
+        constexpr float wingMultiplier = 1.5f; // Adjust as needed
 
+        // Top tip remains at the front.
+        boidVertices[i].front_tip = {
+            position.x + facingDir.x * bodyLength,
+            position.y + facingDir.y * bodyLength,
+            0.0f
+        };
 
-        vertices[9*i + 6] = position.x - triangleSize.x - wingOffset.x;
-        vertices[9*i + 7] = position.y - triangleSize.y - wingOffset.y;
-        vertices[9 * i + 8] = 0.0f;
+        // Wing vertices: offset further along the perpendicular direction.
+        boidVertices[i].front_left = {
+            position.x - facingDir.x * wingWidth + perp.x * wingWidth * wingMultiplier,
+            position.y - facingDir.y * wingWidth + perp.y * wingWidth * wingMultiplier,
+            0.0f
+        };
 
-        // std::cout << "Boid " << i << " at " << boids[i]->getPosition().x << ", " << boids[i]->getPosition().y << "Facing: "<<facingdir.x<<", "<<facingdir.y<<"\n";
+        boidVertices[i].front_right = {
+            position.x - facingDir.x * wingWidth - perp.x * wingWidth * wingMultiplier,
+            position.y - facingDir.y * wingWidth - perp.y * wingWidth * wingMultiplier,
+            0.0f
+        };
+
+        // Back tip is centered directly behind the boid (no perpendicular offset).
+        boidVertices[i].back_tip = {
+            position.x + facingDir.x * tailLength,
+            position.y + facingDir.y * tailLength,
+            0.0f
+        };
+
+        // Indices for two triangles (upper: tip + wings, lower: wings + back tip)
+        indices[6 * i + 0] = 4 * i + 0; // front tip
+        indices[6 * i + 1] = 4 * i + 1; // front left
+        indices[6 * i + 2] = 4 * i + 3; // front right
+
+        indices[6 * i + 3] = 4 * i + 0; // front left
+        indices[6 * i + 4] = 4 * i + 2; // front right
+        indices[6 * i + 5] = 4 * i + 3; // back tip
+
     }
-    m_VertexBuffer->SetData(vertices, size * sizeof(float), true);
+    m_VertexBuffer->SetData(boidVertices, boids.size() * sizeof(BoidVertices));
 
-    VertexBufferLayout layout;
-    layout.Push<float>(3);
-    m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
-
-    auto* indices = new unsigned int[boids.size() * 3];
-
-    for (size_t i = 0; i < boids.size(); i++)
-    {
-        indices[3 * i + 0] = 3 * i + 0;
-        indices[3 * i + 1] = 3 * i + 1;
-        indices[3 * i + 2] = 3 * i + 2;
-    }
-
-    m_IndexBuffer->EditData(indices, boids.size() * 3);
+    m_IndexBuffer->EditData(indices, boids.size() * 6);
 
     m_View = glm::translate(glm::mat4(1.0f), m_translation);
 
@@ -98,7 +130,7 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids)
     Renderer::Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader);
 
     delete[] indices;
-    delete[] vertices;
+    delete[] boidVertices;
 }
 
 void Draw::clear()
