@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "imgui.h"
 #include "Core/Boids/Agent.h"
-#include "GLFW/glfw3.h"
 // Core ko files haru include
 
 void Application::init()
@@ -20,7 +19,7 @@ void Application::onUpdate(float deltaTime)
 
 void Application::onImguiUpdate(float deltaTime)
 {
-    ImGui::Begin("asd");
+    ImGui::Begin("Boids Info and Spawner");
 
     ImGui::DragFloat2("Spawn Position", &m_spawnPosition.x, 1.0f);
 
