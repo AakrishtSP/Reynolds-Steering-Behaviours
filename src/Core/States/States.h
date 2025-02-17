@@ -7,7 +7,8 @@
 
 class States {
 public:
-	void updateWander(const std::vector<std::unique_ptr<Boid>>& boids);
-	
+	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids);	
+	void updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids);
+	void updateAccordingToThreats();
 };
 

@@ -12,6 +12,7 @@ public:
 
     // This is not a good place to keep it, will do for now
     glm::vec2 randomVelocity(float requiredSpeed);
-    void update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>) override;
+    // void update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>) override;
+    void update(const std::vector<std::unique_ptr<Boid>>& boids) override;
 
 };
