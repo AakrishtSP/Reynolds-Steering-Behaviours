@@ -28,6 +28,9 @@ public:
     void setSize(const float size) { m_size = size; }
     void setFacingDirection(glm::vec2& facing) { m_facingDirection = facing; }
 
+    // std::vector<std::unique_ptr<Boid>> getNeighbours();
+
+
 private:
         std::string m_name{};
         glm::vec2 m_position;
