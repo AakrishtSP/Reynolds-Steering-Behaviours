@@ -24,8 +24,7 @@ void BoidsManager::update()
 
     // Yo translation chai screen ko hai not of boids
     ImGui::Begin("Transform");
-    ImGui::SliderFloat("Transform X", &m_translation.x, -640.0f, 640.0f);
-    ImGui::SliderFloat("Transform Y", &m_translation.y, -360.0f, 360.0f);
+    ImGui::DragFloat2("Transform X", &m_translation.x, 1.0f);
     ImGui::End();
 
     m_Draw.setTranslation(m_translation);

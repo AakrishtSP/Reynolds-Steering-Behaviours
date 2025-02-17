@@ -14,4 +14,6 @@ public:
     void shutdown() override;
 private:
     std::unique_ptr<BoidsManager> m_BoidsManager;
+
+    glm::vec2 m_spawnPosition{0,0};
 };
