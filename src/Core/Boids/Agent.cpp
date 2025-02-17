@@ -15,10 +15,15 @@ Agent::Agent(const glm::vec2& spawnPosition) : Boid("Agent") {
 	
 }
 
-void Agent::update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>)
-{
-}
+// void Agent::update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>)
+// {
+// }
 
+void Agent::update(const std::vector<std::unique_ptr<Boid>>& boids){
+    for(auto& boid : boids){
+        boid->findNeighbors(boids);
+    }
+}
 glm::vec2 Agent::randomVelocity(float requiredSpeed)
 {
     static std::random_device rd;
