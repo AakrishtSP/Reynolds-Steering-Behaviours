@@ -26,7 +26,7 @@ public:
     void setVelocity(const glm::vec2& velocity) { m_velocity = velocity; }
     void setAcceleration(const glm::vec2& acceleration) { m_acceleration = acceleration; }
     void setSize(const float size) { m_size = size; }
-    void setFacingDirection(glm::vec2& facing) { m_facingDirection = facing; }
+    void setFacingDirection(const glm::vec2& facing) { m_facingDirection = facing; }
 
 private:
         std::string m_name{};

@@ -68,6 +68,7 @@ void Application::onImguiUpdate(float deltaTime)
                         ImGui::Text("Velocity: (%.2f, %.2f)", boid->getVelocity().x, boid->getVelocity().y);
                         ImGui::Text("Acceleration: (%.2f, %.2f)", boid->getAcceleration().x, boid->getAcceleration().y);
                         ImGui::TreePop(); // End boid node
+                        m_BoidsManager->getDraw().drawCircle(boid->getPosition(), boid->getSize());
                     }
                 }
                 ImGui::TreePop(); // End type group node
