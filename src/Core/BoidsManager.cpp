@@ -34,10 +34,10 @@ void BoidsManager::update()
         m_UpdateStates.updateBoidsDeafult(m_boid);
     }
 
-    // for (auto& boid : m_boid)
-    // {
-    //     boid->update(m_boid);
-    // }
+    for (auto& boid : m_boid)
+    {
+        boid->update(m_boid);
+    }
 }
 
 void BoidsManager::addBoid(std::unique_ptr<Boid> boid)

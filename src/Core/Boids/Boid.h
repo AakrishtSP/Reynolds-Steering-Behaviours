@@ -15,8 +15,8 @@ class Boid {
 public:
     explicit Boid(std::string  name="Boid") : m_name(std::move(name)), m_position(0,0), m_facingDirection(1,0), m_velocity(0,0), m_size(30), m_infuenceRadius(70) {};
     virtual ~Boid() = default;
-    virtual void update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>)=0;
-    // virtual void update(std::vector<std::shared_ptr<Boid>>)=0;
+    // virtual void update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>)=0;
+    virtual void update(const std::vector<std::unique_ptr<Boid>>& boids)=0;
 
     // Getters
     [[nodiscard]] const glm::vec2& getPosition() const { return m_position; }
