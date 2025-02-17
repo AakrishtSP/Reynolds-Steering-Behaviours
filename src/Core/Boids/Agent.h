@@ -10,5 +10,6 @@ public:
     ~Agent() override = default;
 
     void update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>) override;
+    // void update(std::vector<std::shared_ptr<Boid>>) override;
 
 };

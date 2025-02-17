@@ -13,3 +13,7 @@ Agent::Agent(const glm::vec2& spawnPosition) : Boid("Agent") {
 void Agent::update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>)
 {
 }
+
+// void Agent::update(std::vector<std::shared_ptr<Boid>>)
+// {
+// }
