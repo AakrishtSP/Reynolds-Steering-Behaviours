@@ -19,7 +19,6 @@ void Agent::update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>)
 {
 }
 
-
 glm::vec2 Agent::randomVelocity(float requiredSpeed)
 {
     static std::random_device rd;
