@@ -141,8 +141,9 @@ void Draw::clear()
 {
 }
 
-void Draw::setClearColor(float r, float g, float b, float a)
+void Draw::setClearColor(const float r, const float g, const float b, const float a)
 {
+    Renderer::SetClearColor(r, g, b, a);
 }
 
 void Draw::setTranslation(const glm::vec2& translation)

@@ -11,11 +11,11 @@ VertexBuffer::VertexBuffer(const void* data, const unsigned int size, const bool
 	Bind();
 	if (isDynamic)
 	{
-		glBufferData(GL_ARRAY_BUFFER, size, static_cast<const void*>(data), GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
 	}
 	else
 	{
-		glBufferData(GL_ARRAY_BUFFER, size, static_cast<const void*>(data), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
 	s_CurrentlyBound = m_RendererID;
 }

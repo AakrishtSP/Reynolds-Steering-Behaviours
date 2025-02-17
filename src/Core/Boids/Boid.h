@@ -36,7 +36,7 @@ public:
     void setSize(const float size) { m_size = size; }
 
     void setInfuenceRadius(const float infuenceRadius) { m_infuenceRadius = infuenceRadius; }
-    void setFacingDirection(glm::vec2& facing) { m_facingDirection = facing; }
+    void setFacingDirection(const glm::vec2& facing) { m_facingDirection = facing; }
   
     void findNeighbors(const std::vector<std::unique_ptr<Boid>>& boids);
 
