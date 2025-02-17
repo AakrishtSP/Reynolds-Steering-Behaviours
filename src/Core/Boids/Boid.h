@@ -27,6 +27,9 @@ public:
     void setAcceleration(const glm::vec2& acceleration) { m_acceleration = acceleration; }
     void setSize(const float size) { m_size = size; }
 
+    // Functions
+    virtual std::vector<std::unique_ptr<Boid>> findNeighbors(const std::vector<std::unique_ptr<Boid>>& boids) = 0;
+
 private:
         std::string m_name{};
         glm::vec2 m_position;
@@ -34,5 +37,6 @@ private:
         glm::vec2 m_velocity;
         glm::vec2 m_acceleration{};
         std::vector<glm::vec2> m_states;
+        std::vector<std::unique_ptr<Boid>> m_neighbors;
         float m_size;
 };
