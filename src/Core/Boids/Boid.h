@@ -34,9 +34,10 @@ public:
     void setVelocity(const glm::vec2& velocity) { m_velocity = velocity; }
     void setAcceleration(const glm::vec2& acceleration) { m_acceleration = acceleration; }
     void setSize(const float size) { m_size = size; }
-    void setInfuenceRadius(const float infuenceRadius) { m_infuenceRadius = infuenceRadius; }
 
-    // Functions
+    void setInfuenceRadius(const float infuenceRadius) { m_infuenceRadius = infuenceRadius; }
+    void setFacingDirection(glm::vec2& facing) { m_facingDirection = facing; }
+  
     void findNeighbors(const std::vector<std::unique_ptr<Boid>>& boids);
 
 private:
