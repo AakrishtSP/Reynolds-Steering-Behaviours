@@ -114,7 +114,7 @@ void IndexBuffer::Bind() const
 {
     if (s_CurrentlyBound == m_RendererID)
         return;
-    (glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
     s_CurrentlyBound = m_RendererID;
 }
 
@@ -122,6 +122,6 @@ void IndexBuffer::Unbind()
 {
     if (s_CurrentlyBound == 0)
         return;
-    (glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     s_CurrentlyBound = 0;
 }

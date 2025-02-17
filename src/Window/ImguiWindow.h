@@ -6,7 +6,7 @@
 class ImguiWindow {
 public:
     ImguiWindow();
-    ~ImguiWindow();
+    ~ImguiWindow() = default;
 
     void init(Window* window);
     void updateStart() const;

@@ -5,11 +5,11 @@ ApplicationManager::ApplicationManager(IApplication* application): m_Application
 {
 }
 
-ApplicationManager::~ApplicationManager() = default;
 
 void ApplicationManager::init()
 {
     m_Window = new Window();
+    m_Application->setWindow(m_Window);
     m_Window->init();
 
     m_ImguiWindow = new ImguiWindow();

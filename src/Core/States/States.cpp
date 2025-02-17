@@ -28,14 +28,14 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
         glm::vec2 res_vel = { 0, 0 };
         float totalWeight = 0.0f;
 
-        for (const auto& n : allNeighbours)
+        for (const auto& [position, velocity] : allNeighbours)
         {
-            float distance = glm::length(n.position - b->getPosition());
+            const float distance = glm::length(position - b->getPosition());
             if (distance == 0.0f) continue;
 
             // Inverse distance weighting -> Farther the neighbour, lesser the influence
-            float weight = 1.0f / distance; 
-            res_vel += weight * n.velocity;
+            const float weight = 1.0f / distance;
+            res_vel += weight * velocity;
             totalWeight += weight;
         }
 
@@ -51,4 +51,8 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
 
         b->setVelocity(res_vel);
     }
+}
+
+void States::updateAccordingToThreats()
+{
 }

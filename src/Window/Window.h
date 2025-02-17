@@ -7,7 +7,7 @@
 class Window {
 public:
     Window();
-    ~Window();
+    ~Window() = default;
 
     void init();
 

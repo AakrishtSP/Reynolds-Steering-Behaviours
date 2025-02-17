@@ -26,5 +26,4 @@ private:
    std::vector<std::unique_ptr<Boid>> m_boid;
    Draw m_Draw;
    States m_UpdateStates;
-   glm::vec2 m_translation{};
 };
