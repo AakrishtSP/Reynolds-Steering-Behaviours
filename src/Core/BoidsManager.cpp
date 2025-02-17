@@ -31,7 +31,7 @@ void BoidsManager::update()
     if (!m_boid.empty())
     {
         m_Draw.draw(m_boid);
-        m_UpdateStates.updateWander(m_boid);
+        m_UpdateStates.updateBoidsDeafult(m_boid);
     }
 
     // for (auto& boid : m_boid)
