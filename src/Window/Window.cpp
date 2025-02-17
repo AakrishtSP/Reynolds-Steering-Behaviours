@@ -1,7 +1,11 @@
 // src/Window/Window.cpp
 #include "Window.h"
+
+#include <thread>
+
 #include "pch.h"
 #include "glad/gl.h"
+
 
 static void error_callback(const int error, const char* description)
 {
@@ -78,7 +82,7 @@ void EnableOpenGLDebugging()
     }
 }
 
-Window::Window(): m_window(nullptr), m_width(0), m_height(0)
+Window::Window(): m_window(nullptr), m_width(0), m_height(0), m_startTime(0), m_endTime(0)
 {
 }
 
@@ -119,23 +123,28 @@ void Window::init()
     }
     std::cout << "Loaded OpenGL" << GLAD_VERSION_MAJOR(version)<<"."<< GLAD_VERSION_MINOR(version) << std::endl;
 
-    glfwSwapInterval(1); // Enable vsync
+    glfwSwapInterval(0); // Enable vsync
 
     EnableOpenGLDebugging();
 }
 
 void Window::updateStart()
 {
+    m_startTime = glfwGetTime();
     glfwGetFramebufferSize(m_window, &m_width, &m_height);
     glViewport(0, 0, m_width, m_height);
     glClear(GL_COLOR_BUFFER_BIT);
-
 }
 
-void Window::updateEnd() const
+void Window::updateEnd()
 {
     glfwSwapBuffers(m_window);
     glfwPollEvents();
+    m_endTime = glfwGetTime();
+    if (const double elapsed = m_endTime - m_startTime; elapsed < m_targetFrameTime)
+    {
+        std::this_thread::sleep_for(std::chrono::duration<double>(m_targetFrameTime - elapsed));
+    }
 }
 
 void Window::shutdown() const

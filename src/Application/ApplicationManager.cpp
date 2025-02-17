@@ -5,9 +5,7 @@ ApplicationManager::ApplicationManager(IApplication* application): m_Application
 {
 }
 
-ApplicationManager::~ApplicationManager()
-{
-}
+ApplicationManager::~ApplicationManager() = default;
 
 void ApplicationManager::init()
 {

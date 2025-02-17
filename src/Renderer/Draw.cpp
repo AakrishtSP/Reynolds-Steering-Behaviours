@@ -51,10 +51,10 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids)
 
     for (size_t i = 0; i < boids.size(); i++)
     {
-        const glm::vec2 facingdir = boids[i]->getFacingDirection();
+        const glm::vec2 facingdir = glm::normalize(boids[i]->getFacingDirection());
         const glm::vec2 perp(-facingdir.y, facingdir.x); // Perpendicular direction
-        const glm::vec2 triangleSize = facingdir * static_cast<float>(boids[i]->getSize());
-        const glm::vec2 wingOffset = perp * static_cast<float>(boids[i]->getSize()) * 0.2f;
+        const glm::vec2 triangleSize = facingdir * (boids[i]->getSize());
+        const glm::vec2 wingOffset = perp * boids[i]->getSize() * 0.2f;
         const glm::vec2 position = boids[i]->getPosition();
 
         vertices[9*i + 0] = position.x + triangleSize.x;

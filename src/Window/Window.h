@@ -2,6 +2,7 @@
 #pragma once
 #include <memory>
 #include "GLFW/glfw3.h"
+#include <chrono>
 
 class Window {
 public:
@@ -12,7 +13,7 @@ public:
 
     void updateStart();
 
-    void updateEnd() const;
+    void updateEnd();
 
     void shutdown() const;
 
@@ -26,4 +27,10 @@ private:
     GLFWwindow* m_window;
     int m_width;
     int m_height;
+    double m_startTime;
+    double m_endTime;
+
+
+    constexpr static float m_targetFrameRate = 60.0f;
+    constexpr static double m_targetFrameTime = 1.0f / m_targetFrameRate;
 };

@@ -9,4 +9,4 @@
 #include <functional>
 #include <memory>
 #include <chrono>
-#include <assert.h>
+#include <cassert>
