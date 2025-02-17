@@ -34,9 +34,7 @@ void ApplicationManager::update()
 
         m_Application->onUpdate(deltaTime);
 
-        ImGui::Begin("UI");
         m_Application->onImguiUpdate(deltaTime);
-        ImGui::End();
 
         m_ImguiWindow->updateEnd();
 
