@@ -50,16 +50,14 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
         if (totalWeight > 0.0f)
         {
             res_vel /= totalWeight; // This will just normalize the resultant velocity
-            res_vel = glm::normalize(res_vel) * 3.0f; // Preserve speed of 2.0f , I think it should not be hard coded
+            res_vel = glm::normalize(res_vel) * this->agentTerminalSpeed; // Preserve speed of 2.0f , I think it should not be hard coded
         }
         else
         {
-            res_vel = glm::normalize(b->getVelocity()) * 3.0f; // Keep current velocity if no neighbors
+            res_vel = glm::normalize(b->getVelocity()) * this->agentTerminalSpeed; // Keep current velocity if no neighbors
         }
-
-
         res_vel -= b->getVelocity();
-        res_vel *= 0.01;
+        res_vel *= this->influenceFactor;
 
         /*res_vel = b->getVelocity() + res_vel;
         b->setVelocity(res_vel);*/
@@ -75,3 +73,8 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
 void States::updateAccordingToThreats()
 {
 }
+
+
+void States::setInfluenceFactor(float sIF) { this->influenceFactor = sIF; }
+
+void States::setAgentTerminalSpeed(float aTS) { this->agentTerminalSpeed = aTS; }
