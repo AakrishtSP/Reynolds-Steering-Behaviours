@@ -22,6 +22,9 @@ public:
 
    std::vector<std::unique_ptr<Boid>> &getBoids() { return m_boid; }
 
+   //getstates
+   States& getStates();
+
 private:
    std::vector<std::unique_ptr<Boid>> m_boid;
    Draw m_Draw;

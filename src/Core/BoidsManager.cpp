@@ -34,3 +34,9 @@ void BoidsManager::addBoid(std::unique_ptr<Boid> boid)
 {
     m_boid.push_back(std::move(boid));
 }
+
+
+States& BoidsManager::getStates()
+{
+    return this->m_UpdateStates;
+}
