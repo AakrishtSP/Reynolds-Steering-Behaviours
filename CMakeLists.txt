@@ -27,6 +27,11 @@ file(GLOB_RECURSE SOURCES
         src/*.h
 )
 
+message(STATUS "Found C++ files:")
+foreach(FILE ${SOURCES})
+  message(STATUS "  ${FILE}")
+endforeach()
+
 # External dependencies:
 # Add GLM, GLFW, and GLEW as subdirectories (assuming they have CMake support)
 add_subdirectory(external/glm)
