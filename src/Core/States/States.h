@@ -12,6 +12,7 @@ private:
 	float m_agentTerminalSpeed = 3.0f;
 	float m_infludenceRadius = 70;
 	float m_randomnessFactor = 0.5;
+	int m_randomnessInterval = 30;
 
 public:
 	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) ;

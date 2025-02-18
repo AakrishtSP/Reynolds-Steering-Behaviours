@@ -16,13 +16,19 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 
 
         vel += acc;
-        glm::vec2 temp =randomVelocity(m_randomnessFactor,1);
-
-        if (glm::distance(temp,{0,0}) < (m_randomnessFactor/2))
+        b->setChangeInterval(b->getChangeInterval() + 1);
+        if (b->getChangeInterval() > m_randomnessInterval)
         {
-            temp = {0,0};
+            b->setChangeInterval(0);
+            b->setRandomVelocity(randomVelocity(m_randomnessFactor, 1));
         }
-        vel += temp; // Random velocity to add some randomness
+        // glm::vec2 temp =randomVelocity(m_randomnessFactor,1);
+
+        if (glm::distance(b->getRandomVelocity(),{0,0}) < (m_randomnessFactor/4))
+        {
+            b->setRandomVelocity({0,0});
+        }
+        vel += b->getRandomVelocity(); // Random velocity to add some randomness
         b->setVelocity(vel);
         b->setFacingDirection(vel);
         b->setPosition(b->getPosition() + b->getVelocity());
