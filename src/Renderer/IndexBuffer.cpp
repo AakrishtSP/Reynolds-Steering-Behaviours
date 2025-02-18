@@ -43,7 +43,7 @@ IndexBuffer::~IndexBuffer()
     glDeleteBuffers(1, &m_RendererID);
 }
 
-void IndexBuffer::EditData(const unsigned int* data, const unsigned int count, const unsigned int offset /*= 0*/)
+void IndexBuffer::EditData(const unsigned int* data, const unsigned int count, const unsigned int offset /*= 0*/, const bool resize)
 {
     if (!m_bIsDynamic)
         std::cerr << "Warning: Trying to edit a static IndexBuffer!: " << m_RendererID << std::endl;
@@ -51,9 +51,8 @@ void IndexBuffer::EditData(const unsigned int* data, const unsigned int count, c
     assert(data != nullptr && count != 0);
     Bind();
 
-    const unsigned int newCount = std::max(count + offset, m_Count);
-
-    if (const unsigned int newBufferSize = newCount * sizeof(unsigned int); newBufferSize > m_BufferSize)
+    const unsigned int newCount = resize?count + offset : std::max(count + offset, m_Count);
+    if (const unsigned int newBufferSize = newCount * sizeof(unsigned int); newBufferSize > m_BufferSize || resize)
     {
         const unsigned int oldCount = m_Count;
         m_Count = newCount;
@@ -73,7 +72,7 @@ void IndexBuffer::EditData(const unsigned int* data, const unsigned int count, c
         // if offset is 0, we need to copy the new data to the front
         else
         {
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_BufferSize, nullptr, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_BufferSize, data, GL_DYNAMIC_DRAW);
         }
     }
     else // if the new data fits in the buffer copy it directly

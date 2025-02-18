@@ -7,7 +7,7 @@ public:
     explicit IndexBuffer(unsigned int count);
     ~IndexBuffer();
 
-    void EditData(const unsigned int* data, unsigned int count, unsigned int offset = 0);
+    void EditData(const unsigned int* data, unsigned int count, unsigned int offset = 0, bool resize = false);
     //void EditData(void* data, unsigned int count, unsigned int offset = 0);
 
     void GenerateQuadDefault(unsigned int count, unsigned int offsetQuad = 0);

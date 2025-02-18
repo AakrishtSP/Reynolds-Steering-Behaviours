@@ -1,7 +1,7 @@
 #include "States.h"
 #include "Core/Utilities/Utils.h"
 
-void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
+void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) const
 {
     // Can put all the checks here
 

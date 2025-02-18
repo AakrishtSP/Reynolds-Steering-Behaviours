@@ -3,7 +3,7 @@
 
 #include "Renderer/Draw.h"
 
-BoidsManager::BoidsManager()
+BoidsManager::BoidsManager(): m_size(30)
 {
     m_Draw.init();
 }
@@ -20,7 +20,7 @@ void BoidsManager::update()
 
     if (!m_boid.empty())
     {
-        m_Draw.draw(m_boid);
+        m_Draw.draw(m_boid, m_size);
         m_UpdateStates.updateBoidsDeafult(m_boid);
     }
 
@@ -40,3 +40,9 @@ States& BoidsManager::getStates()
 {
     return this->m_UpdateStates;
 }
+
+float BoidsManager::getSize() const
+{ return m_size; }
+
+void BoidsManager::setSize(const float size)
+{ m_size = size; }

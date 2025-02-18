@@ -50,6 +50,7 @@ void Draw::init()
     m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 
     initUnitCircle();
+    // glDisable(GL_CULL_FACE);
 }
 
 void Draw::shutdown()
@@ -60,7 +61,7 @@ void Draw::shutdown()
     Shader::Unbind();
 }
 
-void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids)
+void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids, float size)
 {
     m_VertexArray->Bind();
     m_VertexBuffer->Bind();
@@ -74,12 +75,11 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids)
     {
         const glm::vec2 facingDir = glm::normalize(boids[i]->getFacingDirection());
         const glm::vec2 perp(-facingDir.y, facingDir.x);
-        const float size = boids[i]->getSize();
         const glm::vec2 position = boids[i]->getPosition();
 
         // Define proportions
-        const float bodyLength = size * 0.5f;
-        const float wingWidth = size * 0.1f;
+        const float bodyLength = size * 1.0f;
+        const float wingWidth = size * 0.2f;
         const float tailLength = size * 0.25f;
 
         // A multiplier to exaggerate the wing spread for a caret wing look.
@@ -115,16 +115,16 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids)
         // Indices for two triangles (upper: tip + wings, lower: wings + back tip)
         indices[6 * i + 0] = 4 * i + 0; // front tip
         indices[6 * i + 1] = 4 * i + 1; // front left
-        indices[6 * i + 2] = 4 * i + 3; // front right
+        indices[6 * i + 2] = 4 * i + 3; // back tip
 
-        indices[6 * i + 3] = 4 * i + 0; // front left
+        indices[6 * i + 3] = 4 * i + 0; // front tip
         indices[6 * i + 4] = 4 * i + 2; // front right
         indices[6 * i + 5] = 4 * i + 3; // back tip
 
     }
     m_VertexBuffer->SetData(boidVertices, boids.size() * sizeof(BoidVertices));
 
-    m_IndexBuffer->EditData(indices, boids.size() * 6);
+    m_IndexBuffer->EditData(indices, boids.size() * 6, 0 , true);
 
     m_View = glm::translate(glm::mat4(1.0f), m_translation);
 

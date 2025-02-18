@@ -15,7 +15,7 @@ private:
 	int m_randomnessInterval = 30;
 
 public:
-	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) ;
+	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) const ;
 	void updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids) const;
 	void updateAccordingToThreats();
 

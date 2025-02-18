@@ -15,6 +15,6 @@ public:
 
     [[nodiscard]] ImGuiIO* getIO() const { return m_io; }
 private:
-    ImGuiIO* m_io;
+    ImGuiIO* m_io{};
     Window* m_window;
 };

@@ -3,7 +3,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-ImguiWindow::ImguiWindow(): m_window(nullptr)
+ImguiWindow::ImguiWindow(): m_io(nullptr), m_window(nullptr)
 {
 }
 
