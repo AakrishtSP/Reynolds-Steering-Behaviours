@@ -30,6 +30,7 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
         }
         vel += b->getRandomVelocity(); // Random velocity to add some randomness
         b->setVelocity(vel);
+        b->setVelocity(glm::normalize(b->getVelocity()) * m_agentTerminalSpeed);
         b->setFacingDirection(vel);
         b->setPosition(b->getPosition() + b->getVelocity());
     }
