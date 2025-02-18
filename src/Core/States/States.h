@@ -1,7 +1,10 @@
 #pragma once
 
+#include "Core/Obstacle/Obstacle.h"
 #include "Core/Boids/Boid.h"
 #include<memory>
+
+
 
 class Boid;
 
@@ -14,9 +17,12 @@ private:
 	float m_randomnessFactor = 0.5;
 	int m_randomnessInterval = 30;
 
+	//vObstacle obs({1.0f,1.0f,1.0f,1.0f});
+
 public:
-	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) const ;
+	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids, const std::vector<std::unique_ptr<Obstacle>>& obstacles) const ;
 	void updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids) const;
+	void updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>>& obstacles)const;
 	void updateAccordingToThreats();
 
 

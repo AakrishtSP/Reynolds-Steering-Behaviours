@@ -1,10 +1,11 @@
 #include "States.h"
 #include "Core/Utilities/Utils.h"
 
-void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) const
+void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids, const std::vector<std::unique_ptr<Obstacle>>& obstacles) const
 {
-    // Can put all the checks here
 
+    updateAccordingToBounds(obstacles);
+    // Can put all the checks here
     updateAccordingToNeighbours(boids);
 
 
@@ -35,6 +36,16 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
         b->setPosition(b->getPosition() + b->getVelocity());
     }
 }
+
+
+void States::updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>>& obstacles) const
+{
+    for (auto& obs : obstacles)
+    {
+        std::cout << obs->getBounds().x << " ----------";
+    }
+}
+
 
 // Now for each boid i will have it's neighbours
 // i.e for b in boids, i will have 
