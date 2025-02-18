@@ -59,7 +59,7 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
 
 
         res_vel -= b->getVelocity();
-        res_vel *= 0.01;
+        res_vel *= 0.05;
 
         /*res_vel = b->getVelocity() + res_vel;
         b->setVelocity(res_vel);*/
