@@ -1,10 +1,12 @@
 #include "States.h"
+#include "Core/Utilities/Utils.h"
 
 void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) const
 {
     // Can put all the checks here
 
     updateAccordingToNeighbours(boids);
+
 
 
     for (const auto& b : boids) // Iterate through each boid
@@ -14,7 +16,7 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 
 
         vel += acc;
-
+        vel += randomVelocity(0.5f,1); // Random velocity to add some randomness
         b->setVelocity(vel);
         b->setFacingDirection(vel);
         b->setPosition(b->getPosition() + b->getVelocity());
@@ -30,7 +32,7 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids) const
 {
     for (const auto& b : boids)
-    {
+    {   
         std::vector<neighbor_info> allNeighbours = b->getNeighbors();
         glm::vec2 res_vel = {0, 0};
         float totalWeight = 0.0f;
@@ -67,6 +69,7 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
 
         //b->setAcceleration()
         // b->setVelocity(res_vel);
+        
     }
 }
 
