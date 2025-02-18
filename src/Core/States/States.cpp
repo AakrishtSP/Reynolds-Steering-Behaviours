@@ -1,8 +1,22 @@
 #include "States.h"
 #include "Core/Utilities/Utils.h"
 
+
+void States::determineCluster(const std::vector<std::unique_ptr<Boid>>& boids) const
+{
+    size_t i = 0;
+    for (const auto& boid : boids)
+    {
+        glm::vec3 currentClusterColor = boid->getClusterColor();
+        std::cout <<"Color for boid "<<i<<" "<< currentClusterColor.x << " " << currentClusterColor.y << " " << currentClusterColor.z << "\n";
+    }
+}
+
+
+
 void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids, const std::vector<std::unique_ptr<Obstacle>>& obstacles) const
 {
+    determineCluster(boids);
 
     updateAccordingToBounds(obstacles,boids);
     // Can put all the checks here
