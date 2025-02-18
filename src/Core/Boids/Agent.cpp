@@ -23,6 +23,16 @@ void Agent::update(const std::vector<std::unique_ptr<Boid>>& boids){
     for(auto& boid : boids){
         boid->findNeighbors(boids);
     }
+    glm::vec2 position = getPosition();
+    if(position.x < -680)
+        position.x = 680;
+    if(position.x > 680)
+        position.x = -680;
+    if(position.y < -380)
+        position.y = 380;
+    if(position.y > 380)
+        position.y = -380;
+    setPosition(position);
 }
 glm::vec2 Agent::randomVelocity(const float requiredSpeed)
 {
