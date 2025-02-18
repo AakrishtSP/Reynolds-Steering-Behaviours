@@ -1,6 +1,7 @@
 // src/Core/Boids/Agent.cpp
 #include "Agent.h"
 #include <random>
+#include "../States/States.h"
 
 Agent::Agent(): Boid("Agent")
 {	
@@ -10,7 +11,7 @@ Agent::Agent(const glm::vec2& spawnPosition) : Boid("Agent") {
 	setPosition(spawnPosition);  // Set initial position
 
     // So basically, the observed spped is constat, but the velocity is different
-    glm::vec2 velocity = randomVelocity(2.0f);
+    glm::vec2 velocity = randomVelocity(3.0f);
     setVelocity(velocity);
 	
 }
@@ -23,6 +24,7 @@ void Agent::update(const std::vector<std::unique_ptr<Boid>>& boids){
     for(auto& boid : boids){
         boid->findNeighbors(boids);
     }
+
     glm::vec2 position = getPosition();
     if(position.x < -680)
         position.x = 680;
@@ -33,7 +35,11 @@ void Agent::update(const std::vector<std::unique_ptr<Boid>>& boids){
     if(position.y > 380)
         position.y = -380;
     setPosition(position);
+
 }
+
+
+
 glm::vec2 Agent::randomVelocity(const float requiredSpeed)
 {
     static std::random_device rd;
