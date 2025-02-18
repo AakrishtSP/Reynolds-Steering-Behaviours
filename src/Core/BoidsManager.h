@@ -25,8 +25,13 @@ public:
    //getstates
    States& getStates();
 
+    float getSize() const;
+   void setSize(float size);
+    void setBoids(std::vector<std::unique_ptr<Boid>> boids) { m_boid = std::move(boids); }
+
 private:
    std::vector<std::unique_ptr<Boid>> m_boid;
    Draw m_Draw;
    States m_UpdateStates;
+    float m_size;
 };

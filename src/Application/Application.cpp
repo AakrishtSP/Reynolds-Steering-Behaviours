@@ -70,14 +70,32 @@ void Application::onImguiUpdate(float deltaTime)
     ImGui::SliderFloat("Influence Factor", &m_influenceFactor, 0.01f, 0.1f);
     ImGui::SliderFloat("Terminal Velocity", &m_agentTerminalSpeed, 1.0f, 10.0f);
     ImGui::SliderFloat("Randomness Factor", &m_randomnessFactor, 0.0f, 1.0f);
+    ImGui::SliderFloat("Size", &m_size, 10.0f, 100.0f);
+
+    if (ImGui::Button("Clear Boids"))
+    {
+        m_BoidsManager->setBoids({});
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Reset Parameters"))
+    {
+        m_influenceFactor = 0.05;
+        m_agentTerminalSpeed = 3.0f;
+        m_radiusOfInfluence = 70;
+        m_randomnessFactor = 0.5;
+        m_translation = {0, 0};
+        m_size = 30;
+    }
 
     m_BoidsManager->getStates().setInfluenceFactor(m_influenceFactor);
     m_BoidsManager->getStates().setAgentTerminalSpeed(m_agentTerminalSpeed);
     m_BoidsManager->getStates().setInfluenceRadius(m_radiusOfInfluence);
     m_BoidsManager->getStates().setRandomnessFactor(m_randomnessFactor);
+    m_BoidsManager->setSize(m_size);
 
     // Collapsible header for the whole boids tree
     if (ImGui::CollapsingHeader("Boids Info"))
+
     {
         ImGui::Text("Number of boids: %zu", m_BoidsManager->getBoids().size());
         // Group boids by their type (using m_name)
@@ -96,10 +114,6 @@ void Application::onImguiUpdate(float deltaTime)
                 // List each boid in the group
                 for (const auto boid : boids)
                 {
-                    // boid->setInfuenceRadius(m_radiusOfInfluence);
-
-                    // boid->getStates().setInfluenceFactor(m_influenceFactor);
-                    // boid->getStates().setAgentTerminalSpeed(m_agentTerminalSpeed);
                     char boidLabel[64];
                     std::snprintf(boidLabel, sizeof(boidLabel), "%s - %p", boid->getName().c_str(), boid);
 

@@ -15,7 +15,7 @@ public:
     ~Draw();
     void init();
     static void shutdown();
-    void draw(const std::vector<std::unique_ptr<Boid>>& boids);
+    void draw(const std::vector<std::unique_ptr<Boid>>& boids, float size);
     static void clear();
     static void setClearColor(float r, float g, float b, float a);
     void setTranslation(const glm::vec2& translation);
