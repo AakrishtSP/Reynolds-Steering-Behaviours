@@ -3,7 +3,7 @@
 void Boid::findNeighbors(const std::vector<std::unique_ptr<Boid>>& boids)
 {
     m_neighbors.clear();
-    neighbor_info info{};
+    neighbor_info info;
     // std::vector<std::unique_ptr<Boid>> neighbors;
     for (const auto& boid : boids)
     {
