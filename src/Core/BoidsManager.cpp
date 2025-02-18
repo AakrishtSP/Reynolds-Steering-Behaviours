@@ -6,7 +6,7 @@
 BoidsManager::BoidsManager(): m_size(30)
 {
     m_Draw.init();
-    glm::vec4 mainBounds = { -100,100,100,-100 };
+    glm::vec4 mainBounds = { -1280 / 2, 720 / 2, 1280 / 2, - 720 / 2 };
     std::unique_ptr<Obstacle> mainObs = std::make_unique<Obstacle>(mainBounds);
     addObstacle(std::move(mainObs));
 }

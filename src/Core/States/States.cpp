@@ -4,7 +4,7 @@
 void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids, const std::vector<std::unique_ptr<Obstacle>>& obstacles) const
 {
 
-    updateAccordingToBounds(obstacles);
+    updateAccordingToBounds(obstacles,boids);
     // Can put all the checks here
     updateAccordingToNeighbours(boids);
 
@@ -38,11 +38,46 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids,
 }
 
 
-void States::updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>>& obstacles) const
+void States::updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>>& obstacles, const std::vector<std::unique_ptr<Boid>>& boids) const
 {
-    for (auto& obs : obstacles)
+    const float avoidanceStrength = 0.5f; // Smaller values make smoother turns
+    const float avoidanceDistance = 100;
+
+    for (const auto& boid : boids)
     {
-        std::cout << obs->getBounds().x << " ----------";
+        glm::vec2 pos = boid->getPosition();
+        glm::vec2 vel = boid->getVelocity();
+        glm::vec2 correction = { 0, 0 };
+
+        for (const auto& obs : obstacles)
+        {
+            glm::vec4 bounds = obs->getBounds(); // {left, top, right, bottom}
+
+            // Compute distance from boundary
+            float leftDist = abs(bounds.x - pos.x);
+            float rightDist = abs(bounds.z - pos.x);
+            float topDist = abs(bounds.y - pos.y);
+            float bottomDist = abs(pos.y - bounds.w);
+
+            // Apply scaled avoidance force
+            if (leftDist < avoidanceDistance)
+                correction.x += (1.0f - leftDist / avoidanceDistance) * m_agentTerminalSpeed;
+            else if (rightDist < avoidanceDistance)
+                correction.x -= (1.0f - rightDist / avoidanceDistance) * m_agentTerminalSpeed;
+
+            if (topDist < avoidanceDistance)
+                correction.y -= (1.0f - topDist / avoidanceDistance) * m_agentTerminalSpeed;
+            else if (bottomDist < avoidanceDistance)
+                correction.y += (1.0f - bottomDist / avoidanceDistance) * m_agentTerminalSpeed;
+        }
+
+        // Apply gradual correction
+        if (glm::length(correction) > 0.0f)
+        {
+            correction *= avoidanceStrength; // Scale down the correction for smoothness
+            vel = glm::normalize(vel + correction) * m_agentTerminalSpeed;
+            boid->setVelocity(vel);
+        }
     }
 }
 

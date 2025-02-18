@@ -22,7 +22,7 @@ private:
 public:
 	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids, const std::vector<std::unique_ptr<Obstacle>>& obstacles) const ;
 	void updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids) const;
-	void updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>>& obstacles)const;
+	 void updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>>& obstacles, const std::vector<std::unique_ptr<Boid>>& boids)const;
 	void updateAccordingToThreats();
 
 
