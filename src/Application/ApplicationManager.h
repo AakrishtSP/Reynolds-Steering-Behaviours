@@ -7,7 +7,7 @@
 class ApplicationManager {
 public:
     explicit ApplicationManager(IApplication* application);
-    ~ApplicationManager();
+    ~ApplicationManager() = default;
 
     void init();
     void update();

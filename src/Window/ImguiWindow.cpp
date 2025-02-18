@@ -7,9 +7,6 @@ ImguiWindow::ImguiWindow(): m_io(nullptr), m_window(nullptr)
 {
 }
 
-ImguiWindow::~ImguiWindow()
-= default;
-
 void ImguiWindow::init(Window* window)
 {
     m_window = window;

@@ -31,22 +31,22 @@ void Shader::Unbind()
 }
 
 
-void Shader::SetUniform1i(const std::string& name, int value)
+void Shader::SetUniform1i(const std::string& name, const int value)
 {
     glUniform1i(GetUniformLocation(name), value);
 }
 
-void Shader::SetUniform1iv(const std::string& name, int* value, int count)
+void Shader::SetUniform1iv(const std::string& name, const int* value, const int count)
 {
     glUniform1iv(GetUniformLocation(name), count, value);
 }
 
-void Shader::SetUniform1f(const std::string& name, float value)
+void Shader::SetUniform1f(const std::string& name, const float value)
 {
     glUniform1f(GetUniformLocation(name), value);
 }
 
-void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
+void Shader::SetUniform4f(const std::string& name, const float v0, const float v1, const float v2, const float v3)
 {
     glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
 }

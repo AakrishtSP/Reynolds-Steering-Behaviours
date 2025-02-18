@@ -1,5 +1,7 @@
 // src/Renderer/Draw.cpp
 #include "Draw.h"
+
+#include <cmath>
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
@@ -45,6 +47,8 @@ void Draw::init()
     VertexBufferLayout layout;
     layout.Push<float>(3);
     m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
+
+    initUnitCircle();
 }
 
 void Draw::shutdown()
@@ -137,11 +141,49 @@ void Draw::clear()
 {
 }
 
-void Draw::setClearColor(float r, float g, float b, float a)
+void Draw::setClearColor(const float r, const float g, const float b, const float a)
 {
+    Renderer::SetClearColor(r, g, b, a);
 }
 
 void Draw::setTranslation(const glm::vec2& translation)
 {
     m_translation = glm::vec3( translation, 0.0f);
+}
+
+void Draw::drawCircle(const glm::vec2& position, const float radius) const
+{
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
+    model = glm::scale(model, glm::vec3(radius, radius, 1.0f));
+
+    const glm::mat4 mvp = m_Projection * m_View * model;
+
+    m_UnitCircleShader -> Bind();
+    m_UnitCircleShader -> SetUniformMat4f("u_MVP", mvp);
+    m_UnitCircleShader -> SetUniform4f("u_Color", 0.0f, 1.0f, 0.0f, 1.0f);
+
+    m_UnitCircleVAO -> Bind();
+    glDrawArrays(GL_LINE_LOOP, 0, m_UnitCircleSegmentCount);
+
+}
+
+void Draw::initUnitCircle()
+{
+    constexpr int segments = 64;
+    std::vector<float> unitCircleVertices;
+    unitCircleVertices.reserve(segments * 3);
+    for (int i = 0; i < segments; ++i)
+    {
+        const float angle = 2.0f * glm::pi<float>() * static_cast<float>(i) / segments;
+        unitCircleVertices.push_back(std::cos(angle));  // x
+        unitCircleVertices.push_back(std::sin(angle));   // y
+        unitCircleVertices.push_back(0.0f);           // z
+    }
+    m_UnitCircleShader = std::make_unique<Shader>("assets/shaders/circle.glsl.vert", "assets/shaders/circle.glsl.frag");
+    m_UnitCircleVAO = std::make_unique<VertexArray>();
+    m_UnitCircleVBO = std::make_unique<VertexBuffer>(unitCircleVertices.data(), unitCircleVertices.size() * sizeof(float), false);
+    VertexBufferLayout layout;
+    layout.Push<float>(3);
+    m_UnitCircleVAO->AddBuffer(*m_UnitCircleVBO, layout);
+    m_UnitCircleSegmentCount = segments;
 }
