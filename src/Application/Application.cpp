@@ -15,7 +15,7 @@ void Application::init()
 // This is for eveytime application update huda kheri !?
 void Application::onUpdate(float deltaTime)
 {
-    if (m_isSpawning && !m_onCooldown && glfwGetMouseButton(m_Window->getWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    if (m_isSpawning && !m_onCooldown && glfwGetMouseButton(m_Window->getWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !m_ImguiWindow->getIO()->WantCaptureMouse)
     {
         m_onCooldown = true;
         double xpos, ypos;
@@ -81,10 +81,12 @@ void Application::onImguiUpdate(float deltaTime)
         {
             if (ImGui::TreeNode(name.c_str()))
             {
+                ImGui::SliderFloat("Raduius of Influence", &m_radiusOfInfluence, 0.0f, 200.0f);
                 ImGui::Text("Number of boids: %zu", boids.size());
                 // List each boid in the group
                 for (const auto boid : boids)
                 {
+                    boid->setInfuenceRadius(m_radiusOfInfluence);
                     char boidLabel[64];
                     std::snprintf(boidLabel, sizeof(boidLabel), "%s - %p", boid->getName().c_str(), boid);
 

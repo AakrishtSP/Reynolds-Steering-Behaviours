@@ -7,7 +7,7 @@
 
 
 Agent::Agent(): Boid("Agent")
-{	
+{
 }
 
 Agent::Agent(const glm::vec2& spawnPosition) : Boid("Agent") {
