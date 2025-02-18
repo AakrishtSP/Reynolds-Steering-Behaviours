@@ -17,13 +17,14 @@ private:
 	float m_randomnessFactor = 0.5;
 	int m_randomnessInterval = 30;
 
-	//vObstacle obs({1.0f,1.0f,1.0f,1.0f});
-
 public:
 	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids, const std::vector<std::unique_ptr<Obstacle>>& obstacles) const ;
 	void updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids) const;
 	 void updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>>& obstacles, const std::vector<std::unique_ptr<Boid>>& boids)const;
 	void updateAccordingToThreats();
+
+	void determineCluster(const std::vector<std::unique_ptr<Boid>>& boids) const;
+
 
 
 	[[nodiscard]] float getInfluenceFactor() const;

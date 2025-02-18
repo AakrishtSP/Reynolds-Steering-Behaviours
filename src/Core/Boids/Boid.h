@@ -18,7 +18,7 @@ struct neighbor_info {
 
 class Boid {
 public:
-    explicit Boid(std::string  name="Boid") : m_name(std::move(name)), m_position(0,0), m_facingDirection(1,0), m_velocity(0,0),  m_randomVelocity({0,0}), m_changeInterval(static_cast<int>(getRandom(0, 30))){};
+    explicit Boid(std::string  name="Boid") :m_clusterColor(0,0,0), m_name(std::move(name)), m_position(0,0), m_facingDirection(1,0), m_velocity(0,0),  m_randomVelocity({0,0}), m_changeInterval(static_cast<int>(getRandom(0, 30))){};
     virtual ~Boid() = default;
     virtual void update(const std::vector<std::unique_ptr<Boid>>& boids, const States& states)=0;
 
@@ -31,6 +31,7 @@ public:
     [[nodiscard]] glm::vec2 getFacingDirection() const { return m_facingDirection; }
     [[nodiscard]] const std::vector<neighbor_info>& getNeighbors() const { return m_neighbors; }
     [[nodiscard]] int getChangeInterval() const { return m_changeInterval; }
+    [[nodiscard]] const glm::vec3& getClusterColor() {return m_clusterColor;}
 
     //Setters
     void setPosition(const glm::vec2& position) { m_position = position; }
@@ -39,6 +40,7 @@ public:
     void setChangeInterval(const int changeInterval) { m_changeInterval = changeInterval; }
     void setFacingDirection(const glm::vec2& facing) { m_facingDirection = facing; }
     void setRandomVelocity(const glm::vec2& randomVelocity) { m_randomVelocity = randomVelocity; }
+    void setClusterColor(const glm::vec3& clusterColor) { m_clusterColor = clusterColor; }
   
     void findNeighbors(const std::vector<std::unique_ptr<Boid>>& boids,float influenceRadius);
 
@@ -51,4 +53,6 @@ private:
         glm::vec2 m_randomVelocity;
         std::vector<neighbor_info> m_neighbors;
         int m_changeInterval;
+        glm::vec3 m_clusterColor;
+
 };
