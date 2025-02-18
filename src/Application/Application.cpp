@@ -65,6 +65,15 @@ void Application::onImguiUpdate(float deltaTime)
     ImGui::DragFloat2("Spawn Position", &m_spawnPosition.x, 1.0f);
     ImGui::Checkbox("Spawn Agent on click", &m_isSpawning);
 
+
+    ImGui::SliderFloat("Raduius of Influence", &m_radiusOfInfluence, 0.0f, 200.0f);
+    ImGui::SliderFloat("Influence Factor", &m_influenceFactor, 0.01f, 0.1f);
+    ImGui::SliderFloat("Terminal Velocity", &m_agentTerminalSpeed, 1.0f, 10.0f);
+
+    m_BoidsManager->getStates().setInfluenceFactor(m_influenceFactor);
+    m_BoidsManager->getStates().setAgentTerminalSpeed(m_agentTerminalSpeed);
+    m_BoidsManager->getStates().setInfluenceRadius(m_radiusOfInfluence);
+
     // Collapsible header for the whole boids tree
     if (ImGui::CollapsingHeader("Boids Info"))
     {
@@ -81,12 +90,14 @@ void Application::onImguiUpdate(float deltaTime)
         {
             if (ImGui::TreeNode(name.c_str()))
             {
-                ImGui::SliderFloat("Raduius of Influence", &m_radiusOfInfluence, 0.0f, 200.0f);
                 ImGui::Text("Number of boids: %zu", boids.size());
                 // List each boid in the group
                 for (const auto boid : boids)
                 {
-                    boid->setInfuenceRadius(m_radiusOfInfluence);
+                    // boid->setInfuenceRadius(m_radiusOfInfluence);
+
+                    // boid->getStates().setInfluenceFactor(m_influenceFactor);
+                    // boid->getStates().setAgentTerminalSpeed(m_agentTerminalSpeed);
                     char boidLabel[64];
                     std::snprintf(boidLabel, sizeof(boidLabel), "%s - %p", boid->getName().c_str(), boid);
 
@@ -98,7 +109,7 @@ void Application::onImguiUpdate(float deltaTime)
                         ImGui::Text("Acceleration: (%.2f, %.2f)", boid->getAcceleration().x, boid->getAcceleration().y);
                         ImGui::Text("Number of neighbors: %zu", boid->getNeighbors().size());
                         ImGui::TreePop(); // End boid node
-                        m_BoidsManager->getDraw().drawCircle(boid->getPosition(), boid->getInfuenceRadius());
+                        m_BoidsManager->getDraw().drawCircle(boid->getPosition(), m_BoidsManager->getStates().getInfluenceRadius());
                     }
                 }
                 ImGui::TreePop(); // End type group node

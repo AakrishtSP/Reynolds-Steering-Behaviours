@@ -26,7 +26,7 @@ void BoidsManager::update()
 
     for (const auto& boid : m_boid)
     {
-        boid->update(m_boid);
+        boid->update(m_boid, m_UpdateStates);
     }
 }
 
