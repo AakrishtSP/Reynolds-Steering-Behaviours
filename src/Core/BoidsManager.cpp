@@ -6,6 +6,9 @@
 BoidsManager::BoidsManager(): m_size(30)
 {
     m_Draw.init();
+    glm::vec4 mainBounds = { -1280 / 2, 720 / 2, 1280 / 2, - 720 / 2 };
+    std::unique_ptr<Obstacle> mainObs = std::make_unique<Obstacle>(mainBounds);
+    addObstacle(std::move(mainObs));
 }
 
 BoidsManager::~BoidsManager()
@@ -21,7 +24,7 @@ void BoidsManager::update()
     if (!m_boid.empty())
     {
         m_Draw.draw(m_boid, m_size);
-        m_UpdateStates.updateBoidsDeafult(m_boid);
+        m_UpdateStates.updateBoidsDeafult(m_boid,m_obstacles);
     }
 
     for (const auto& boid : m_boid)
@@ -33,6 +36,11 @@ void BoidsManager::update()
 void BoidsManager::addBoid(std::unique_ptr<Boid> boid)
 {
     m_boid.push_back(std::move(boid));
+}
+
+void BoidsManager::addObstacle(std::unique_ptr<Obstacle> obs)
+{
+    m_obstacles.push_back(std::move(obs));
 }
 
 

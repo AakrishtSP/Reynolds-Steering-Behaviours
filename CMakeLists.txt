@@ -50,7 +50,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 # (Optional) Precompiled header support if available
 if (EXISTS "${CMAKE_SOURCE_DIR}/src/pch.h")
-    target_precompile_headers(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/src/pch.h")
+    target_precompile_headers(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/src/pch.h") 
 endif ()
 
 #--- Manually add GLAD as a static library ---
