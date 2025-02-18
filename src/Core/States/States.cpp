@@ -3,14 +3,22 @@
 void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 {
     // Can put all the checks here
+
     updateAccordingToNeighbours(boids);
+
 
 
     for (const auto& b : boids) // Iterate through each boid
     {
+        glm::vec2 acc = b->getAcceleration();
         glm::vec2 vel = b->getVelocity();
+
+
+        vel += acc;
+        
+        b->setVelocity(vel);
         b->setFacingDirection(vel);
-        b->setPosition(b->getPosition() + vel);
+        b->setPosition(b->getPosition() + b->getVelocity());
     }
 }
 
@@ -42,17 +50,32 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
         if (totalWeight > 0.0f)
         {
             res_vel /= totalWeight; // This will just normalize the resultant velocity
-            res_vel = glm::normalize(res_vel) * 2.0f; // Preserve speed of 2.0f , I think it should not be hard coded
+            res_vel = glm::normalize(res_vel) * this->agentTerminalSpeed; // Preserve speed of 2.0f , I think it should not be hard coded
         }
         else
         {
-            res_vel = glm::normalize(b->getVelocity()) * 2.0f; // Keep current velocity if no neighbors
+            res_vel = glm::normalize(b->getVelocity()) * this->agentTerminalSpeed; // Keep current velocity if no neighbors
         }
+        res_vel -= b->getVelocity();
+        res_vel *= this->influenceFactor;
 
-        b->setVelocity(res_vel);
+
+        /*res_vel = b->getVelocity() + res_vel;
+        b->setVelocity(res_vel);*/
+
+        b->setAcceleration(res_vel);
+
+        //b->setAcceleration()
+        // b->setVelocity(res_vel);
+        
     }
 }
 
 void States::updateAccordingToThreats()
 {
 }
+
+
+void States::setInfluenceFactor(float sIF) { this->influenceFactor = sIF; }
+
+void States::setAgentTerminalSpeed(float aTS) { this->agentTerminalSpeed = aTS; }
