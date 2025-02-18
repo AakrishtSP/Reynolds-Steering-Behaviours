@@ -59,6 +59,7 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
         res_vel -= b->getVelocity();
         res_vel *= this->influenceFactor;
 
+
         /*res_vel = b->getVelocity() + res_vel;
         b->setVelocity(res_vel);*/
 
