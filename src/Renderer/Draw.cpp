@@ -36,6 +36,7 @@ struct BoidVertices
 
 void Draw::init()
 {
+    Renderer::SetClearColor(0.117f, 0.137f, 0.156f, 1.0f);
     m_VertexArray = std::make_unique<VertexArray>();
     m_VertexArray->Bind();
     m_VertexBuffer = std::make_unique<VertexBuffer>(nullptr, 0, true);
@@ -77,7 +78,7 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids)
         const glm::vec2 position = boids[i]->getPosition();
 
         // Define proportions
-        const float bodyLength = size * 1.0f;
+        const float bodyLength = size * 0.5f;
         const float wingWidth = size * 0.1f;
         const float tailLength = size * 0.25f;
 

@@ -4,6 +4,6 @@
 out vec4 FragColor;
 
 void main() {
-    vec4 color = vec4(0.0, 1.0, 0.0, 1.0);
+    vec4 color = vec4(0.59, 0.74, 1.0, 1.0);
     FragColor = color; // Use calculated color
 }
