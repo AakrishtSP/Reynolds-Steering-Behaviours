@@ -10,7 +10,7 @@ Agent::Agent(const glm::vec2& spawnPosition) : Boid("Agent") {
 	setPosition(spawnPosition);  // Set initial position
 
     // So basically, the observed spped is constat, but the velocity is different
-    glm::vec2 velocity = randomVelocity(2.0f);
+    glm::vec2 velocity = randomVelocity(1.0f);
     setVelocity(velocity);
 	
 }

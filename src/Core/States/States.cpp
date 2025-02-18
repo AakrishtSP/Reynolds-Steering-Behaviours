@@ -42,11 +42,11 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
         if (totalWeight > 0.0f)
         {
             res_vel /= totalWeight; // This will just normalize the resultant velocity
-            res_vel = glm::normalize(res_vel) * 2.0f; // Preserve speed of 2.0f , I think it should not be hard coded
+            res_vel = glm::normalize(res_vel) * 1.0f; // Preserve speed of 2.0f , I think it should not be hard coded
         }
         else
         {
-            res_vel = glm::normalize(b->getVelocity()) * 2.0f; // Keep current velocity if no neighbors
+            res_vel = glm::normalize(b->getVelocity()) * 1.0f; // Keep current velocity if no neighbors
         }
 
         b->setVelocity(res_vel);
