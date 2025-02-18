@@ -13,6 +13,7 @@ void ApplicationManager::init()
     m_Window->init();
 
     m_ImguiWindow = new ImguiWindow();
+    m_Application->setImguiWindow(m_ImguiWindow);
     m_ImguiWindow->init(m_Window);
 
     m_Application->init();

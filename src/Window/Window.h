@@ -22,7 +22,6 @@ public:
     [[nodiscard]] int getWidth() const { return m_width; }
 
     [[nodiscard]] int getHeight() const { return m_height; }
-
 private:
     GLFWwindow* m_window;
     int m_width;

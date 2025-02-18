@@ -42,7 +42,6 @@ public:
 
     // std::vector<std::unique_ptr<Boid>> getNeighbours();
 
-
 private:
         std::string m_name{};
         glm::vec2 m_position;
