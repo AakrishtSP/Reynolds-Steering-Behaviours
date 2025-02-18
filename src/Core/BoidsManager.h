@@ -25,7 +25,7 @@ public:
    //getstates
    States& getStates();
 
-    float getSize() const;
+    [[nodiscard]] float getSize() const;
    void setSize(float size);
     void setBoids(std::vector<std::unique_ptr<Boid>> boids) { m_boid = std::move(boids); }
 
