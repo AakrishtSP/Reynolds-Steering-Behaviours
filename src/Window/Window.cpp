@@ -86,8 +86,6 @@ Window::Window(): m_window(nullptr), m_width(0), m_height(0), m_startTime(0), m_
 {
 }
 
-Window::~Window()
-= default;
 
 void Window::init()
 {

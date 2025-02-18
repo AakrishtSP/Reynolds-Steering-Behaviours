@@ -1,13 +1,13 @@
 // src/Window/Window.h
 #pragma once
-#include <memory>
+
 #include "GLFW/glfw3.h"
-#include <chrono>
+
 
 class Window {
 public:
     Window();
-    ~Window();
+    ~Window() = default;
 
     void init();
 
@@ -29,7 +29,6 @@ private:
     int m_height;
     double m_startTime;
     double m_endTime;
-
 
     constexpr static float m_targetFrameRate = 60.0f;
     constexpr static double m_targetFrameTime = 1.0f / m_targetFrameRate;

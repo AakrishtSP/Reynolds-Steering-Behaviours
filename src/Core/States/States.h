@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/Boids/Boid.h"
-#include"glm/glm.hpp"
 #include<memory>
 
 

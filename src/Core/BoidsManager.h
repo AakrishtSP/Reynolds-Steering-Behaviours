@@ -18,11 +18,12 @@ public:
 
    void addBoid(std::unique_ptr<Boid> boid);
 
+    Draw& getDraw() { return m_Draw; }
+
    std::vector<std::unique_ptr<Boid>> &getBoids() { return m_boid; }
 
 private:
    std::vector<std::unique_ptr<Boid>> m_boid;
    Draw m_Draw;
    States m_UpdateStates;
-   glm::vec2 m_translation{};
 };
