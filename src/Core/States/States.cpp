@@ -1,7 +1,7 @@
 #include "States.h"
 #include "Core/Utilities/Utils.h"
 
-void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) const
+void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 {
     // Can put all the checks here
 
@@ -16,7 +16,13 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 
 
         vel += acc;
-        vel += randomVelocity(0.5f,1); // Random velocity to add some randomness
+        glm::vec2 temp =randomVelocity(m_randomnessFactor,1);
+
+        if (glm::distance(temp,{0,0}) < (m_randomnessFactor/2))
+        {
+            temp = {0,0};
+        }
+        vel += temp; // Random velocity to add some randomness
         b->setVelocity(vel);
         b->setFacingDirection(vel);
         b->setPosition(b->getPosition() + b->getVelocity());
@@ -98,3 +104,8 @@ void States::setInfluenceFactor(const float sIF) { m_influenceFactor = sIF; }
 void States::setAgentTerminalSpeed(const float aTS) { m_agentTerminalSpeed = aTS; }
 
 void States::setInfluenceRadius(const float iR) { m_infludenceRadius = iR; }
+
+void States::setRandomnessFactor(const float rF)
+{
+    m_randomnessFactor = rF;
+}

@@ -69,10 +69,12 @@ void Application::onImguiUpdate(float deltaTime)
     ImGui::SliderFloat("Raduius of Influence", &m_radiusOfInfluence, 0.0f, 200.0f);
     ImGui::SliderFloat("Influence Factor", &m_influenceFactor, 0.01f, 0.1f);
     ImGui::SliderFloat("Terminal Velocity", &m_agentTerminalSpeed, 1.0f, 10.0f);
+    ImGui::SliderFloat("Randomness Factor", &m_randomnessFactor, 0.0f, 1.0f);
 
     m_BoidsManager->getStates().setInfluenceFactor(m_influenceFactor);
     m_BoidsManager->getStates().setAgentTerminalSpeed(m_agentTerminalSpeed);
     m_BoidsManager->getStates().setInfluenceRadius(m_radiusOfInfluence);
+    m_BoidsManager->getStates().setRandomnessFactor(m_randomnessFactor);
 
     // Collapsible header for the whole boids tree
     if (ImGui::CollapsingHeader("Boids Info"))

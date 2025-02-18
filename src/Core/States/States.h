@@ -11,9 +11,10 @@ private:
 	float m_influenceFactor = 0.05;
 	float m_agentTerminalSpeed = 3.0f;
 	float m_infludenceRadius = 70;
+	float m_randomnessFactor = 0.5;
 
 public:
-	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) const;
+	void updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids) ;
 	void updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids) const;
 	void updateAccordingToThreats();
 
@@ -25,5 +26,6 @@ public:
 	void setInfluenceFactor(float sIF);
 	void setAgentTerminalSpeed(float aTS);
 	void setInfluenceRadius(float iR);
+	void setRandomnessFactor(float rF);
 };
 
