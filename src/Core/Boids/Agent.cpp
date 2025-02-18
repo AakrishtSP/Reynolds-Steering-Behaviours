@@ -1,7 +1,10 @@
 // src/Core/Boids/Agent.cpp
 #include "Agent.h"
 #include <random>
-#include "../States/States.h"
+
+#include "Core/States/States.h"
+#include "Core/Utilities/Utils.h"
+
 
 Agent::Agent(): Boid("Agent")
 {	
@@ -40,14 +43,14 @@ void Agent::update(const std::vector<std::unique_ptr<Boid>>& boids){
 
 
 
-glm::vec2 Agent::randomVelocity(const float requiredSpeed)
-{
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::uniform_real_distribution<float> angle_dist(0.0f, 2.0f * 3.1415);
+// glm::vec2 Agent::randomVelocity(const float requiredSpeed)
+// {
+//     static std::random_device rd;
+//     static std::mt19937 gen(rd());
+//     static std::uniform_real_distribution<float> angle_dist(0.0f, 2.0f * 3.1415);
 
-    const float angle = angle_dist(gen); // Random angle in [0, 2 pi]
+//     const float angle = angle_dist(gen); // Random angle in [0, 2 pi]
 
-    const glm::vec2 velocity = glm::vec2(glm::cos(angle), glm::sin(angle)) * requiredSpeed;
-    return velocity;
-}
+//     const glm::vec2 velocity = glm::vec2(glm::cos(angle), glm::sin(angle)) * requiredSpeed;
+//     return velocity;
+// }
