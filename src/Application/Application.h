@@ -21,4 +21,5 @@ private:
     bool m_onCooldown{false};
     glm::vec2 m_translation{0,0};
     glm::vec2 m_spawnPosition{0,0};
+    float m_radiusOfInfluence{70};
 };
