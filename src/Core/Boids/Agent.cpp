@@ -23,9 +23,9 @@ Agent::Agent(const glm::vec2& spawnPosition) : Boid("Agent") {
 // {
 // }
 
-void Agent::update(const std::vector<std::unique_ptr<Boid>>& boids){
+void Agent::update(const std::vector<std::unique_ptr<Boid>>& boids, const States& states){
     for(auto& boid : boids){
-        boid->findNeighbors(boids);
+        boid->findNeighbors(boids,states.getInfluenceRadius());
     }
 
     glm::vec2 position = getPosition();
@@ -38,7 +38,6 @@ void Agent::update(const std::vector<std::unique_ptr<Boid>>& boids){
     if(position.y > 380)
         position.y = -380;
     setPosition(position);
-
 }
 
 

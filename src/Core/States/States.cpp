@@ -11,12 +11,18 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 
     for (const auto& b : boids) // Iterate through each boid
     {
-        glm::vec2 acc = b->getAcceleration();
+        const glm::vec2 acc = b->getAcceleration();
         glm::vec2 vel = b->getVelocity();
 
 
         vel += acc;
-        vel += randomVelocity(0.5f,1); // Random velocity to add some randomness
+        glm::vec2 temp =randomVelocity(m_randomnessFactor,1);
+
+        if (glm::distance(temp,{0,0}) < (m_randomnessFactor/2))
+        {
+            temp = {0,0};
+        }
+        vel += temp; // Random velocity to add some randomness
         b->setVelocity(vel);
         b->setFacingDirection(vel);
         b->setPosition(b->getPosition() + b->getVelocity());
@@ -29,12 +35,12 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 // which will be of type std::vector<std::unique_ptr<Boid>>
 
 
-void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids)
+void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids) const
 {
     for (const auto& b : boids)
     {   
         std::vector<neighbor_info> allNeighbours = b->getNeighbors();
-        glm::vec2 res_vel = { 0, 0 };
+        glm::vec2 res_vel = {0, 0};
         float totalWeight = 0.0f;
 
         for (const auto& [position, velocity] : allNeighbours)
@@ -51,14 +57,15 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
         if (totalWeight > 0.0f)
         {
             res_vel /= totalWeight; // This will just normalize the resultant velocity
-            res_vel = glm::normalize(res_vel) * this->agentTerminalSpeed; // Preserve speed of 2.0f , I think it should not be hard coded
+            res_vel = glm::normalize(res_vel) * m_agentTerminalSpeed;
+            // Preserve speed of 2.0f , I think it should not be hard coded
         }
         else
         {
-            res_vel = glm::normalize(b->getVelocity()) * this->agentTerminalSpeed; // Keep current velocity if no neighbors
+            res_vel = glm::normalize(b->getVelocity()) * m_agentTerminalSpeed; // Keep current velocity if no neighbors
         }
         res_vel -= b->getVelocity();
-        res_vel *= this->influenceFactor;
+        res_vel *= m_influenceFactor;
 
 
         /*res_vel = b->getVelocity() + res_vel;
@@ -76,7 +83,29 @@ void States::updateAccordingToThreats()
 {
 }
 
+float States::getInfluenceFactor() const
+{
+    return m_influenceFactor;
+}
 
-void States::setInfluenceFactor(float sIF) { this->influenceFactor = sIF; }
+float States::getAgentTerminalSpeed() const
+{
+    return m_agentTerminalSpeed;
+}
 
-void States::setAgentTerminalSpeed(float aTS) { this->agentTerminalSpeed = aTS; }
+float States::getInfluenceRadius() const
+{
+    return m_infludenceRadius;
+}
+
+
+void States::setInfluenceFactor(const float sIF) { m_influenceFactor = sIF; }
+
+void States::setAgentTerminalSpeed(const float aTS) { m_agentTerminalSpeed = aTS; }
+
+void States::setInfluenceRadius(const float iR) { m_infludenceRadius = iR; }
+
+void States::setRandomnessFactor(const float rF)
+{
+    m_randomnessFactor = rF;
+}

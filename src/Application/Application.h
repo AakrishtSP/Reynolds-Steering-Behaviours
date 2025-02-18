@@ -22,4 +22,8 @@ private:
     glm::vec2 m_translation{0,0};
     glm::vec2 m_spawnPosition{0,0};
     float m_radiusOfInfluence{70};
+
+    float m_influenceFactor{0.05};
+    float m_agentTerminalSpeed{3.0f};
+    float m_randomnessFactor{0.5};
 };
