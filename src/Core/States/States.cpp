@@ -1,4 +1,5 @@
 #include "States.h"
+#include "Core/Utilities/Utils.h"
 
 void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 {
@@ -15,7 +16,7 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids)
 
 
         vel += acc;
-        
+        vel += randomVelocity(0.5f,1); // Random velocity to add some randomness
         b->setVelocity(vel);
         b->setFacingDirection(vel);
         b->setPosition(b->getPosition() + b->getVelocity());
