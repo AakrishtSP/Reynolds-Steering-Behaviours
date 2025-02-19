@@ -9,11 +9,6 @@ BoidsManager::BoidsManager(): m_size(30)
     glm::vec4 mainBounds = { -1280 / 2, 720 / 2, 1280 / 2, - 720 / 2 };
     std::unique_ptr<Obstacle> mainObs = std::make_unique<Obstacle>(mainBounds);
     addObstacle(std::move(mainObs));
-
-    // Test bounds
-    glm::vec4 test_bound = { -100,100,100,-100 };
-    std::unique_ptr<Obstacle> testObs = std::make_unique<Obstacle>(test_bound);
-    addObstacle(std::move(testObs));
     
 }
 
