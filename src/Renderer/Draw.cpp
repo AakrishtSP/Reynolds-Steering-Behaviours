@@ -92,9 +92,9 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids, const float siz
         // Top tip remains at the front.
         boidVertices[i].front_tip.position = {
 
-                position.x + facingDir.x * bodyLength,
-                position.y + facingDir.y * bodyLength,
-                0.0f
+            position.x + facingDir.x * bodyLength,
+            position.y + facingDir.y * bodyLength,
+            0.0f
         };
         boidVertices[i].front_tip.color = color;
 
@@ -129,11 +129,10 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids, const float siz
         indices[6 * i + 3] = 4 * i + 0; // front tip
         indices[6 * i + 4] = 4 * i + 2; // front right
         indices[6 * i + 5] = 4 * i + 3; // back tip
-
     }
     m_VertexBuffer->SetData(boidVertices, boids.size() * sizeof(BoidVertices));
 
-    m_IndexBuffer->EditData(indices, boids.size() * 6, 0 , true);
+    m_IndexBuffer->EditData(indices, boids.size() * 6, 0, true);
 
     m_View = glm::translate(glm::mat4(1.0f), m_translation);
 
@@ -158,27 +157,27 @@ void Draw::setClearColor(const float r, const float g, const float b, const floa
 
 void Draw::setTranslation(const glm::vec2& translation)
 {
-    m_translation = glm::vec3( translation, 0.0f);
+    m_translation = glm::vec3(translation, 0.0f);
 }
 
-void Draw::drawCircle(const glm::vec2& position, const float radius, const glm::vec3 color , const int LineWidth) const
+void Draw::drawCircle(const glm::vec2& position, const float radius, const glm::vec3 color, const int LineWidth) const
 {
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f));
     model = glm::scale(model, glm::vec3(radius, radius, 1.0f));
 
     const glm::mat4 mvp = m_Projection * m_View * model;
 
-    m_UnitCircleShader -> Bind();
-    m_UnitCircleShader -> SetUniformMat4f("u_MVP", mvp);
-    m_UnitCircleShader -> SetUniform4f("u_Color", color.r, color.g, color.b, 1.0f);
+    m_UnitCircleShader->Bind();
+    m_UnitCircleShader->SetUniformMat4f("u_MVP", mvp);
+    m_UnitCircleShader->SetUniform4f("u_Color", color.r, color.g, color.b, 1.0f);
 
-    m_UnitCircleVAO -> Bind();
+    m_UnitCircleVAO->Bind();
     glLineWidth(static_cast<float>(LineWidth));
     glDrawArrays(GL_LINE_LOOP, 0, m_UnitCircleSegmentCount);
-
 }
 
-void Draw::drawObstacle(const std::vector<std::unique_ptr<Obstacle>>& obstacles, const glm::vec3 color , const int LineWidth) const
+void Draw::drawObstacle(const std::vector<std::unique_ptr<Obstacle>>& obstacles, const glm::vec3 color,
+                        const int LineWidth) const
 {
     m_ObstacleVAO->Bind();
     m_ObstacleVBO->Bind();
@@ -188,24 +187,52 @@ void Draw::drawObstacle(const std::vector<std::unique_ptr<Obstacle>>& obstacles,
     for (size_t i = 0; i < obstacles.size(); i++)
     {
         const glm::vec4 bounds = obstacles[i]->getBounds();
-        vertices[8 * i + 0] = { bounds.x, bounds.y, 0.0f };
-        vertices[8 * i + 1] = { bounds.z, bounds.y, 0.0f };
-        vertices[8 * i + 2] = { bounds.z, bounds.y, 0.0f };
-        vertices[8 * i + 3] = { bounds.z, bounds.w, 0.0f };
-        vertices[8 * i + 4] = { bounds.z, bounds.w, 0.0f };
-        vertices[8 * i + 5] = { bounds.x, bounds.w, 0.0f };
-        vertices[8 * i + 6] = { bounds.x, bounds.w, 0.0f };
-        vertices[8 * i + 7] = { bounds.x, bounds.y, 0.0f };
-
+        vertices[8 * i + 0] = {bounds.x, bounds.y, 0.0f};
+        vertices[8 * i + 1] = {bounds.z, bounds.y, 0.0f};
+        vertices[8 * i + 2] = {bounds.z, bounds.y, 0.0f};
+        vertices[8 * i + 3] = {bounds.z, bounds.w, 0.0f};
+        vertices[8 * i + 4] = {bounds.z, bounds.w, 0.0f};
+        vertices[8 * i + 5] = {bounds.x, bounds.w, 0.0f};
+        vertices[8 * i + 6] = {bounds.x, bounds.w, 0.0f};
+        vertices[8 * i + 7] = {bounds.x, bounds.y, 0.0f};
     }
 
     const glm::mat4 mvp = m_Projection * m_View;
-    m_UnitCircleShader -> SetUniformMat4f("u_MVP", mvp);
-    m_UnitCircleShader -> SetUniform4f("u_Color", color.r, color.g, color.b, 1.0f);
+    m_UnitCircleShader->SetUniformMat4f("u_MVP", mvp);
+    m_UnitCircleShader->SetUniform4f("u_Color", color.r, color.g, color.b, 1.0f);
 
     m_ObstacleVBO->SetData(vertices, obstacles.size() * 8 * sizeof(glm::vec3));
     glLineWidth(static_cast<float>(LineWidth));
     glDrawArrays(GL_LINES, 0, static_cast<int>(obstacles.size()) * 8);
+
+    delete[] vertices;
+}
+
+void Draw::drawObstacleOutline(glm::vec4 bounds, glm::vec3 color, int LineWidth) const
+{
+    m_ObstacleVAO->Bind();
+    m_ObstacleVBO->Bind();
+    m_UnitCircleShader->Bind();
+
+    auto* vertices = new glm::vec3[8];
+
+    vertices[0] = {-640.0f, bounds.y, 0.0f};
+    vertices[1] = {640.0f, bounds.y, 0.0f};
+    vertices[2] = {bounds.z, 360.0f, 0.0f};
+    vertices[3] = {bounds.z, -360.0f, 0.0f};
+    vertices[4] = {640.0f, bounds.w, 0.0f};
+    vertices[5] = {-640.0f, bounds.w, 0.0f};
+    vertices[6] = {bounds.x, -360.0f, 0.0f};
+    vertices[7] = {bounds.x, 360.0f, 0.0f};
+
+
+    const glm::mat4 mvp = m_Projection * m_View;
+    m_UnitCircleShader->SetUniformMat4f("u_MVP", mvp);
+    m_UnitCircleShader->SetUniform4f("u_Color", color.r, color.g, color.b, 1.0f);
+
+    m_ObstacleVBO->SetData(vertices, 8 * sizeof(glm::vec3));
+    glLineWidth(static_cast<float>(LineWidth));
+    glDrawArrays(GL_LINES, 0, 8);
 
     delete[] vertices;
 }
@@ -218,13 +245,14 @@ void Draw::initUnitCircle()
     for (int i = 0; i < segments; ++i)
     {
         const float angle = 2.0f * glm::pi<float>() * static_cast<float>(i) / segments;
-        unitCircleVertices.push_back(std::cos(angle));  // x
-        unitCircleVertices.push_back(std::sin(angle));   // y
-        unitCircleVertices.push_back(0.0f);           // z
+        unitCircleVertices.push_back(std::cos(angle)); // x
+        unitCircleVertices.push_back(std::sin(angle)); // y
+        unitCircleVertices.push_back(0.0f); // z
     }
     m_UnitCircleShader = std::make_unique<Shader>("assets/shaders/circle.glsl.vert", "assets/shaders/circle.glsl.frag");
     m_UnitCircleVAO = std::make_unique<VertexArray>();
-    m_UnitCircleVBO = std::make_unique<VertexBuffer>(unitCircleVertices.data(), unitCircleVertices.size() * sizeof(float), false);
+    m_UnitCircleVBO = std::make_unique<VertexBuffer>(unitCircleVertices.data(),
+                                                     unitCircleVertices.size() * sizeof(float), false);
     VertexBufferLayout layout;
     layout.Push<float>(3);
     m_UnitCircleVAO->AddBuffer(*m_UnitCircleVBO, layout);
@@ -238,5 +266,4 @@ void Draw::initObstacle()
     VertexBufferLayout layout;
     layout.Push<float>(3);
     m_ObstacleVAO->AddBuffer(*m_ObstacleVBO, layout);
-
 }

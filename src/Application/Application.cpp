@@ -15,7 +15,8 @@ void Application::init()
 // This is for eveytime application update huda kheri !?
 void Application::onUpdate(float deltaTime)
 {
-    if (m_isSpawning && !m_onCooldown && glfwGetMouseButton(m_Window->getWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !m_ImguiWindow->getIO()->WantCaptureMouse)
+    if (m_isSpawning && !m_onCooldown && glfwGetMouseButton(m_Window->getWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS
+        && !m_ImguiWindow->getIO()->WantCaptureMouse)
     {
         m_onCooldown = true;
         double xpos, ypos;
@@ -24,7 +25,7 @@ void Application::onUpdate(float deltaTime)
         int width, height;
         glfwGetWindowSize(m_Window->getWindow(), &width, &height);
 
-        m_spawnPosition = glm::vec2(xpos/width * 1280 - 640, -(ypos/height * 720 - 360)) - m_translation;
+        m_spawnPosition = glm::vec2(xpos / width * 1280 - 640, -(ypos / height * 720 - 360)) - m_translation;
         m_BoidsManager->addBoid(std::make_unique<Agent>(m_spawnPosition));
     }
     if (m_onCooldown && glfwGetMouseButton(m_Window->getWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
@@ -32,19 +33,23 @@ void Application::onUpdate(float deltaTime)
         m_onCooldown = false;
     }
 
-    if (glfwGetKey(m_Window->getWindow(), GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(m_Window->getWindow(), GLFW_KEY_W) == GLFW_REPEAT)
+    if (glfwGetKey(m_Window->getWindow(), GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(m_Window->getWindow(), GLFW_KEY_W) ==
+        GLFW_REPEAT)
     {
         m_translation.y -= 10;
     }
-    if (glfwGetKey(m_Window->getWindow(), GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(m_Window->getWindow(), GLFW_KEY_S) == GLFW_REPEAT)
+    if (glfwGetKey(m_Window->getWindow(), GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(m_Window->getWindow(), GLFW_KEY_S) ==
+        GLFW_REPEAT)
     {
         m_translation.y += 10;
     }
-    if (glfwGetKey(m_Window->getWindow(), GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(m_Window->getWindow(), GLFW_KEY_A) == GLFW_REPEAT)
+    if (glfwGetKey(m_Window->getWindow(), GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(m_Window->getWindow(), GLFW_KEY_A) ==
+        GLFW_REPEAT)
     {
         m_translation.x += 10;
     }
-    if (glfwGetKey(m_Window->getWindow(), GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(m_Window->getWindow(), GLFW_KEY_D) == GLFW_REPEAT)
+    if (glfwGetKey(m_Window->getWindow(), GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(m_Window->getWindow(), GLFW_KEY_D) ==
+        GLFW_REPEAT)
     {
         m_translation.x -= 10;
     }
@@ -52,6 +57,12 @@ void Application::onUpdate(float deltaTime)
     m_BoidsManager->update();
 
     m_BoidsManager->getDraw().setTranslation(m_translation);
+
+    m_BoidsManager->getStates().setInfluenceFactor(m_influenceFactor);
+    m_BoidsManager->getStates().setAgentTerminalSpeed(m_agentTerminalSpeed);
+    m_BoidsManager->getStates().setInfluenceRadius(m_radiusOfInfluence);
+    m_BoidsManager->getStates().setRandomnessFactor(m_randomnessFactor);
+    m_BoidsManager->setSize(m_size);
 }
 
 
@@ -67,7 +78,7 @@ void Application::onImguiUpdate(float deltaTime)
 
 
     ImGui::SliderFloat("Raduius of Influence", &m_radiusOfInfluence, 0.0f, 200.0f);
-    ImGui::SliderFloat("Influence Factor", &m_influenceFactor, 0.01f, 0.1f);
+    ImGui::SliderFloat("Influence Factor", &m_influenceFactor, 0.01f, 1.0f);
     ImGui::SliderFloat("Terminal Velocity", &m_agentTerminalSpeed, 1.0f, 10.0f);
     ImGui::SliderFloat("Randomness Factor", &m_randomnessFactor, 0.0f, 1.0f);
     ImGui::SliderFloat("Size", &m_size, 10.0f, 100.0f);
@@ -86,15 +97,32 @@ void Application::onImguiUpdate(float deltaTime)
         m_translation = {0, 0};
         m_size = 30;
     }
+    ImGui::End();
 
-    m_BoidsManager->getStates().setInfluenceFactor(m_influenceFactor);
-    m_BoidsManager->getStates().setAgentTerminalSpeed(m_agentTerminalSpeed);
-    m_BoidsManager->getStates().setInfluenceRadius(m_radiusOfInfluence);
-    m_BoidsManager->getStates().setRandomnessFactor(m_randomnessFactor);
-    m_BoidsManager->setSize(m_size);
+    if (ImGui::Begin("Obstacle"))
+    {
+        ImGui::Text("Obstacle Bounds");
+        m_BoidsManager->getDraw().drawObstacleOutline(m_obstacleBounds, {1.0f,1.0f,1.0f}, 1);
 
-    // Collapsible header for the whole boids tree
-    if (ImGui::CollapsingHeader("Boids Info"))
+        ImGui::SliderFloat("Top", &m_obstacleBounds.y, -360.0f, 360.0f);
+        ImGui::SliderFloat("Bottom", &m_obstacleBounds.w, -360.0f, 360.0f);
+        ImGui::SliderFloat("Left", &m_obstacleBounds.x, -640.0f, 640.0f);
+        ImGui::SliderFloat("Right", &m_obstacleBounds.z, -640.0f, 640.0f);
+
+        if (ImGui::Button("Add Obstacles"))
+        {
+            m_BoidsManager->defineObstracle(m_obstacleBounds);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Clear Obstacles"))
+        {
+            m_BoidsManager->setObstacles({});
+            m_BoidsManager->defineObstracle({-1280 / 2, 720 / 2, 1280 / 2, -720 / 2});
+        }
+    }
+    ImGui::End();
+
+    if (ImGui::Begin("Bois Info"))
 
     {
         ImGui::Text("Number of boids: %zu", m_BoidsManager->getBoids().size());
@@ -125,7 +153,8 @@ void Application::onImguiUpdate(float deltaTime)
                         ImGui::Text("Acceleration: (%.2f, %.2f)", boid->getAcceleration().x, boid->getAcceleration().y);
                         ImGui::Text("Number of neighbors: %zu", boid->getNeighbors().size());
                         ImGui::TreePop(); // End boid node
-                        m_BoidsManager->getDraw().drawCircle(boid->getPosition(), m_BoidsManager->getStates().getInfluenceRadius());
+                        m_BoidsManager->getDraw().drawCircle(boid->getPosition(),
+                                                             m_BoidsManager->getStates().getInfluenceRadius());
                     }
                 }
                 ImGui::TreePop(); // End type group node

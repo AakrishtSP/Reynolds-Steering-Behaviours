@@ -22,6 +22,8 @@ public:
     void drawCircle(const glm::vec2& position, float radius,  glm::vec3 color= {0.0F, 1.0f,0.0f} , int LineWidth=1) const;
 
     void drawObstacle(const std::vector<std::unique_ptr<Obstacle>>& obstacles, glm::vec3 color= {1.0f, 0.0f,0.0f} , int LineWidth=10) const;
+    void drawObstacleOutline(glm::vec4 bounds, glm::vec3 color= {1.0f, 0.0f,0.0f} , int LineWidth=10) const;
+
 
 private:
     void initUnitCircle();
