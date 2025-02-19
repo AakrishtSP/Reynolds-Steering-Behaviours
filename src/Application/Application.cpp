@@ -79,10 +79,10 @@ void Application::onImguiUpdate(float deltaTime)
     ImGui::SameLine();
     if (ImGui::Button("Reset Parameters"))
     {
-        m_influenceFactor = 0.05;
+        m_influenceFactor = 0.08;
         m_agentTerminalSpeed = 3.0f;
-        m_radiusOfInfluence = 70;
-        m_randomnessFactor = 0.5;
+        m_radiusOfInfluence = 80;
+        m_randomnessFactor = 0.3;
         m_translation = {0, 0};
         m_size = 30;
     }
