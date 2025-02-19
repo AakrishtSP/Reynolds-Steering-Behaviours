@@ -138,7 +138,14 @@ void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids,
 void States::updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>>& obstacles, const std::vector<std::unique_ptr<Boid>>& boids) const
 {
     const float avoidanceStrength = 0.5f; // Smaller values make smoother turns
-    const float avoidanceDistance = 100;
+    
+    float avoidanceDistance{};
+
+    if(m_influenceFactor > 0.8) avoidanceDistance = 300;
+    else if (m_influenceFactor > 0.6)  avoidanceDistance = 250;
+    else if (m_influenceFactor > 0.4) avoidanceDistance = 150;
+    else avoidanceDistance = 100;
+
     const float avoidanceDistanceExterior = avoidanceDistance/2;
 
     for (const auto& boid : boids)
