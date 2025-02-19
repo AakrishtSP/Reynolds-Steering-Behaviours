@@ -5,6 +5,9 @@
 
 #include "pch.h"
 #include "glad/gl.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 
 static void error_callback(const int error, const char* description)
@@ -90,6 +93,10 @@ Window::Window(): m_window(nullptr), m_width(0), m_height(0), m_startTime(0), m_
 
 void Window::init()
 {
+    // At initialization
+#ifdef _WIN32
+    timeBeginPeriod(1);  // Request 1ms resolution
+#endif
     glfwSetErrorCallback(error_callback);
 
     if (!glfwInit())
@@ -148,6 +155,10 @@ void Window::updateEnd()
 
 void Window::shutdown() const
 {
+    // Clean up: Reset the timer resolution.
+#ifdef _WIN32
+    timeEndPeriod(1);
+#endif
     glfwDestroyWindow(m_window);
     glfwTerminate();
 }

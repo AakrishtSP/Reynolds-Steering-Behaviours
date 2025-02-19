@@ -70,7 +70,7 @@ void Application::onImguiUpdate(float deltaTime)
 {
     ImGui::Begin("Boids Attributes and Spawner");
     ImGui::DragFloat2("Transform X", &m_translation.x, 1.0f);
-    ImGui::DragFloat2("Spawn Position", &m_spawnPosition.x, 1.0f);
+    // ImGui::DragFloat2("Spawn Position", &m_spawnPosition.x, 1.0f);
     ImGui::Checkbox("Spawn Agent on click", &m_isSpawning);
 
 
