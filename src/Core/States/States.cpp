@@ -139,6 +139,7 @@ void States::updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>
 {
     const float avoidanceStrength = 0.5f; // Smaller values make smoother turns
     const float avoidanceDistance = 100;
+    const float avoidanceDistanceExterior = avoidanceDistance/2;
 
     for (const auto& boid : boids)
     {
@@ -150,11 +151,20 @@ void States::updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>
         {
             const glm::vec4 bounds = obs->getBounds(); // {left, top, right, bottom}
 
+            // Check if boid is inside the obstracle, 
+            bool insideX = pos.x >= bounds.x && pos.x <= bounds.z;
+            bool insideY = pos.y >= bounds.w && pos.y <= bounds.y;
+            bool inside = insideX && insideY;
+
+
             // Compute distance from boundary
             const float leftDist = abs(bounds.x - pos.x);
             const float rightDist = abs(bounds.z - pos.x);
             const float topDist = abs(bounds.y - pos.y);
             const float bottomDist = abs(pos.y - bounds.w);
+
+            // If inside, then paila j theo tai
+            if(inside){
 
             // Apply scaled avoidance force
             if (leftDist < avoidanceDistance)
@@ -166,6 +176,19 @@ void States::updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>
                 correction.y -= (1.0f - topDist / avoidanceDistance) * m_agentTerminalSpeed;
             else if (bottomDist < avoidanceDistance)
                 correction.y += (1.0f - bottomDist / avoidanceDistance) * m_agentTerminalSpeed;
+            }
+            
+            else {
+                if (leftDist < avoidanceDistanceExterior)
+                    correction.x -= (1.0f - leftDist / avoidanceDistanceExterior) * m_agentTerminalSpeed;
+                else if (rightDist < avoidanceDistanceExterior)
+                    correction.x += (1.0f - rightDist / avoidanceDistanceExterior) * m_agentTerminalSpeed;
+
+                if (topDist < avoidanceDistanceExterior)
+                    correction.y += (1.0f - topDist / avoidanceDistanceExterior) * m_agentTerminalSpeed;
+                else if (bottomDist < avoidanceDistanceExterior)
+                    correction.y -= (1.0f - bottomDist / avoidanceDistanceExterior) * m_agentTerminalSpeed;
+            }
         }
 
         // Apply gradual correction
