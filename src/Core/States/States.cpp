@@ -8,7 +8,6 @@ void States::determineCluster(const std::vector<std::unique_ptr<Boid>>& boids) c
     for (const auto& boid : boids)
     {
         glm::vec3 currentClusterColor = boid->getClusterColor();
-        std::cout <<"Color for boid "<<i<<" "<< currentClusterColor.x << " " << currentClusterColor.y << " " << currentClusterColor.z << "\n";
     }
 }
 
