@@ -102,6 +102,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         glm            # from external/glm
         imgui          # our manually added ImGui library
 )
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE winmm)
+endif()
 
 # Optionally, set custom output paths per target
 set_target_properties(${PROJECT_NAME} PROPERTIES
