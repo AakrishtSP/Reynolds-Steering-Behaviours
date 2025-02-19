@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
-      fail-fast: true
+      fail-fast: false
 
       # Set up a matrix to run the following 3 configurations:
       # 1. <Windows, Release, latest MSVC compiler toolchain on the default runner image, default generator>
@@ -104,12 +104,16 @@ jobs:
       run: ctest --build-config ${{ matrix.build_type }}
 
     - name: Set Zip Filename
-      id: filename
+      shell: bash
       run: |
-        ZIP_NAME="Reynold-Steering-Behaviours-${{ matrix.os }}-${{ matrix.c_compiler }}.zip"
-        echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
+        if [[ "$RUNNER_OS" == "Windows" ]]; then
+          echo "ZIP_NAME=Reynold-Steering-Behaviours-windows-latest-${{ matrix.c_compiler }}.zip" >> "$GITHUB_ENV"
+        else
+          echo "ZIP_NAME=Reynold-Steering-Behaviours-ubuntu-latest-${{ matrix.c_compiler }}.zip" >> "$GITHUB_ENV"
+        fi
 
     - name: Zip the bin folder
+      shell: bash
       run: |
         cd build
         zip -r "$ZIP_NAME" bin
