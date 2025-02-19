@@ -9,7 +9,6 @@ void Boid::findNeighbors(const std::vector<std::unique_ptr<Boid>>& boids, const 
     {
         if (boid.get() == this)
             continue;
-
         if (glm::distance(m_position, boid->getPosition()) < influenceRadius)
         {
             info.position = boid->getPosition();

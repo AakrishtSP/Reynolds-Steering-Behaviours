@@ -1,5 +1,5 @@
 #include "Obstacle.h"
-#include <cmath>
+
 
 Obstacle::Obstacle(glm::vec4 bounds): m_bounds(bounds) {}
 

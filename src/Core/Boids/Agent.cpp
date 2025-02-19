@@ -10,12 +10,12 @@ Agent::Agent(): Boid("Agent")
 }
 
 Agent::Agent(const glm::vec2& spawnPosition) : Boid("Agent") {
-	setPosition(spawnPosition);  // Set initial position
+    setPosition(spawnPosition);  // Set initial position
 
     // So basically, the observed spped is constat, but the velocity is different
-    const glm::vec2 velocity = randomVelocity(1, 0);
+    const glm::vec2 velocity = randomVelocity(static_cast<float>(1), 0);
     setVelocity(velocity);
-	
+
 }
 
 // void Agent::update(std::vector<std::pair<glm::vec2, std::shared_ptr<Boid>>>)
@@ -28,14 +28,22 @@ void Agent::update(const std::vector<std::unique_ptr<Boid>>& boids, const States
     }
 
     glm::vec2 position = getPosition();
-    if(position.x < -680)
-        position.x = 680;
-    if(position.x > 680)
-        position.x = -680;
-    if(position.y < -380)
-        position.y = 380;
-    if(position.y > 380)
-        position.y = -380;
+    if(position.x < static_cast<float>(-680))
+    {
+        position.x = static_cast<float>(680);
+    }
+    if(position.x > static_cast<float>(680))
+    {
+        position.x = static_cast<float>(-680);
+    }
+    if(position.y < static_cast<float>(-380))
+    {
+        position.y = static_cast<float>(380);
+    }
+    if(position.y > static_cast<float>(380))
+    {
+        position.y = static_cast<float>(-380);
+    }
     setPosition(position);
 }
 

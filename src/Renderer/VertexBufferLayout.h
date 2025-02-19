@@ -26,7 +26,7 @@
         }
 
         //VertexBufferElement(unsigned int type, unsigned int count, unsigned char normalized, unsigned int offset)
-        //	: type(type), count(count), normalized(normalized), offset(offset) {
+        //: type(type), count(count), normalized(normalized), offset(offset) {
         //}
     };
 

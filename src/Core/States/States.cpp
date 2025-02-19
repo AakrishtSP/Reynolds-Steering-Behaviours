@@ -149,13 +149,13 @@ void States::updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>
 
         for (const auto& obs : obstacles)
         {
-            glm::vec4 bounds = obs->getBounds(); // {left, top, right, bottom}
+            const glm::vec4 bounds = obs->getBounds(); // {left, top, right, bottom}
 
             // Compute distance from boundary
-            float leftDist = abs(bounds.x - pos.x);
-            float rightDist = abs(bounds.z - pos.x);
-            float topDist = abs(bounds.y - pos.y);
-            float bottomDist = abs(pos.y - bounds.w);
+            const float leftDist = abs(bounds.x - pos.x);
+            const float rightDist = abs(bounds.z - pos.x);
+            const float topDist = abs(bounds.y - pos.y);
+            const float bottomDist = abs(pos.y - bounds.w);
 
             // Apply scaled avoidance force
             if (leftDist < avoidanceDistance)
@@ -181,15 +181,15 @@ void States::updateAccordingToBounds(const std::vector<std::unique_ptr<Obstacle>
 
 
 // Now for each boid i will have it's neighbours
-// i.e for b in boids, i will have 
-// b->getNeighbours() 
+// i.e for b in boids, i will have
+// b->getNeighbours()
 // which will be of type std::vector<std::unique_ptr<Boid>>
 
 
 void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>>& boids) const
 {
     for (const auto& b : boids)
-    {   
+    {
         std::vector<neighbor_info> allNeighbours = b->getNeighbors();
         glm::vec2 res_vel = {0, 0};
         float totalWeight = 0.0f;
@@ -226,7 +226,6 @@ void States::updateAccordingToNeighbours(const std::vector<std::unique_ptr<Boid>
 
         //b->setAcceleration()
         // b->setVelocity(res_vel);
-        
     }
 }
 

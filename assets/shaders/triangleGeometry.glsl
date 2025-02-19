@@ -3,6 +3,8 @@
 layout (triangles) in;
 layout (triangle_strip, max_vertices = 100) out; // Emit multiple scanline segments
 
+uniform vec4 u_Color;
+
 out vec3 fragColor;
 
 void bresenhamLine(vec2 p0, vec2 p1) {
@@ -10,7 +12,8 @@ void bresenhamLine(vec2 p0, vec2 p1) {
     vec2 d = abs(p1 - p0);
     vec2 s = vec2(sign(p1.x - p0.x), sign(p1.y - p0.y));
     
-    bool steep = d.y > d.x;
+    bool steep;
+    steep = d.y > d.x;
     if (steep) d = d.yx;
     
     float err = d.x / 2.0;
@@ -18,7 +21,7 @@ void bresenhamLine(vec2 p0, vec2 p1) {
     for (int i = 0; i < int(d.x); i++) {
         vec4 pos = vec4((steep ? p.yx : p), 0.0, 1.0);
         gl_Position = vec4(pos.xy, 0.0, 1.0);
-        fragColor = vec3(1.0, 1.0, 1.0); // White color for line
+        fragColor = u_Color;
         EmitVertex();
         
         err -= d.y;

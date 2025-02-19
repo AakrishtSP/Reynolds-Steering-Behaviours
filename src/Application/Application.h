@@ -21,10 +21,10 @@ private:
     bool m_onCooldown{false};
     glm::vec2 m_translation{0,0};
     glm::vec2 m_spawnPosition{0,0};
-    float m_radiusOfInfluence{70};
+    float m_radiusOfInfluence{70.0F};
 
-    float m_influenceFactor{0.05};
-    float m_agentTerminalSpeed{3.0f};
-    float m_randomnessFactor{0.5};
-    float m_size{30};
+    float m_influenceFactor{0.05F};
+    float m_agentTerminalSpeed{3.0F};
+    float m_randomnessFactor{0.5F};
+    float m_size{30.0F};
 };

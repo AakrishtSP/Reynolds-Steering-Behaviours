@@ -33,7 +33,7 @@ public:
     [[nodiscard]] int getChangeInterval() const { return m_changeInterval; }
     [[nodiscard]] const glm::vec3& getClusterColor() {return m_clusterColor;}
     [[nodiscard]] const glm::vec3& getIndivisualColor() { return m_indivisualColor;}
-    [[nodiscard]] const bool isInCluster() { return m_inCluster; }
+    [[nodiscard]] bool isInCluster() const { return m_inCluster; }
 
     //Setters
     void setPosition(const glm::vec2& position) { m_position = position; }

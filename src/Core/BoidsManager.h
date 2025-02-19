@@ -24,7 +24,6 @@ public:
 
    std::vector<std::unique_ptr<Boid>> &getBoids() { return m_boid; }
 
-   //getstates
    States& getStates();
 
     [[nodiscard]] float getSize() const;
