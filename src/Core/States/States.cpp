@@ -38,7 +38,7 @@ void States::determineCluster(const std::vector<std::unique_ptr<Boid>>& boids) c
 
 
             /* Basically:
-                Pick a boid that hasn’t been assigned a cluster yet
+                Pick a boid that hasnt been assigned a cluster yet
                 Find all boids near it (within a certain radius)
                     Repeat for each nearby boid until we get a full group, Thus the BSF kind of like flood fill garne bela ma gare jastai
                 Store this group as a cluster and move to the next unvisited boid.
