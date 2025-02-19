@@ -2,41 +2,99 @@
 #include "Core/Utilities/Utils.h"
 
 
+#include <queue>
+#include <unordered_map>
+
+// Store all unique clusters and their assigned colors so we can access their vallues accross multiple frames
+static std::unordered_map<size_t, glm::vec3> clusterColors;
+
+
 void States::determineCluster(const std::vector<std::unique_ptr<Boid>>& boids) const
 {
-    const int clusterRadius = m_infludenceRadius;
+    const float clusterRadius = m_infludenceRadius;
+    const size_t nBoids = boids.size();
 
-    // Reset in-cluster flag for all boids before checking clusters
-    for (const auto& boid : boids)
-    {
+    std::vector<bool> visited(nBoids, false);
+
+    // Reset cluster colors before checking new clusters -> We assume that none of the boids are in cluster
+    for (const auto& boid : boids) {
         boid->resetInCluster();
     }
 
-    // Determine clusters and set colors
-    for (size_t i = 0; i < boids.size(); i++)
-    {
-        for (size_t j = 0; j < boids.size(); j++)
-        {
-            if (i == j) continue;
 
-            // Check if in influence radius
-            if (glm::distance(boids.at(i)->getPosition(), boids.at(j)->getPosition()) < clusterRadius)
-            {
-                boids.at(j)->setClusterColor(boids.at(i)->getClusterColor());
-                boids.at(j)->setInCluster();
+    for (size_t i = 0; i < nBoids; ++i) {
+        if (visited[i]) continue; // Skip if already processed
+
+        std::vector<size_t> clusterIndices;  // -> Stores the indicies of boids in current cluster
+        std::queue<size_t> queue;
+        queue.push(i);
+        visited.at(i) = true;
+
+        // BFS to find all boids connected to boid i
+        while (!queue.empty()) {
+            size_t current = queue.front();
+            queue.pop();
+            clusterIndices.push_back(current);
+
+
+            /* Basically:
+                Pick a boid that hasn’t been assigned a cluster yet
+                Find all boids near it (within a certain radius)
+                    Repeat for each nearby boid until we get a full group, Thus the BSF kind of like flood fill garne bela ma gare jastai
+                Store this group as a cluster and move to the next unvisited boid.
+            */
+            for (size_t j = 0; j < nBoids; ++j) {
+                // If a boid belong to the cluster, add it's index to the queue of indices for current initlized cluster and mark it visited
+                if (!visited[j] && glm::distance(boids[current]->getPosition(), boids[j]->getPosition()) < clusterRadius) {
+                    visited[j] = true;
+                    queue.push(j);
+                }
             }
+        }
+
+        // Yeti vayasi we basically just calculated a unique cluster by picking a boid that has not been visited yet i.e. was not a part of a cluster
+        // Now need to assign a color to the cluster which is again TRICKY
+
+
+        // Find a unique identifier for the cluster basically can pick any boid in this cluster which we just calculated
+        size_t clusterID = clusterIndices[0];
+
+        // If this cluster already existed in the previous frame, keep its color Else assign a different random color
+        glm::vec3 clusterColor;
+        if (clusterColors.find(clusterID) != clusterColors.end()) {
+            clusterColor = clusterColors[clusterID];
+        }
+        else {
+            // Generate a new color for the cluster
+            clusterColor = glm::vec3(getRandom(0, 1), getRandom(0, 1), getRandom(0, 1));
+            clusterColors[clusterID] = clusterColor; // Store it
+        }
+
+        // Assign this color to all the boids in the cluster we just calculated
+        for (auto idx : clusterIndices) {
+            boids[idx]->setClusterColor(clusterColor);
+            boids[idx]->setInCluster();
         }
     }
 
-    // Reset color for boids that are NOT in a cluster
-    for (const auto& boid : boids)
-    {
-        if (!boid->isInCluster())
-        {
+    // Remove stale cluster colors (clusters that no longer exist)
+    for (auto it = clusterColors.begin(); it != clusterColors.end();) {
+        if (!visited[it->first]) {
+            it = clusterColors.erase(it); // Remove stale entry
+        }
+        else {
+            ++it;
+        }
+    }
+
+    // Reset color for boids not in a cluster
+    for (const auto& boid : boids) {
+        if (!boid->isInCluster()) {
             boid->setClusterColor(boid->getIndivisualColor());
         }
     }
 }
+
 
 
 
