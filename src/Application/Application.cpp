@@ -68,11 +68,8 @@ void Application::onUpdate(float deltaTime)
 
 void Application::onImguiUpdate(float deltaTime)
 {
-    ImGui::Begin("Transform");
+    ImGui::Begin("Boids Attributes and Spawner");
     ImGui::DragFloat2("Transform X", &m_translation.x, 1.0f);
-    ImGui::End();
-
-    ImGui::Begin("Boids Info and Spawner");
     ImGui::DragFloat2("Spawn Position", &m_spawnPosition.x, 1.0f);
     ImGui::Checkbox("Spawn Agent on click", &m_isSpawning);
 
@@ -97,7 +94,10 @@ void Application::onImguiUpdate(float deltaTime)
         m_translation = {0, 0};
         m_size = 30;
     }
+    ImGui::Text("Current FPS: %.1f", ImGui::GetIO().Framerate);
+    ImGui::Text("Current Frame Time: %.3f ms", 1000.0f / ImGui::GetIO().Framerate);
     ImGui::End();
+
 
     if (ImGui::Begin("Obstacle"))
     {
@@ -117,7 +117,8 @@ void Application::onImguiUpdate(float deltaTime)
         if (ImGui::Button("Clear Obstacles"))
         {
             m_BoidsManager->setObstacles({});
-            m_BoidsManager->defineObstracle({-1280 / 2, 720 / 2, 1280 / 2, -720 / 2});
+            m_obstacleBounds = {-1280 / 2, 720 / 2, 1280 / 2, -720 / 2};
+            m_BoidsManager->defineObstracle(m_obstacleBounds);
         }
     }
     ImGui::End();
@@ -126,10 +127,16 @@ void Application::onImguiUpdate(float deltaTime)
 
     {
         ImGui::Text("Number of boids: %zu", m_BoidsManager->getBoids().size());
+        ImGui::Checkbox("Show All Influence Circle", &showAllInfluenceCircle);
         // Group boids by their type (using m_name)
         std::unordered_map<std::string, std::vector<Boid*>> boidsByType;
         for (const auto& boidPtr : m_BoidsManager->getBoids())
         {
+            if (showAllInfluenceCircle)
+            {
+                m_BoidsManager->getDraw().drawCircle(boidPtr->getPosition(),
+                                                             m_BoidsManager->getStates().getInfluenceRadius());
+            }
             boidsByType[boidPtr->getName()].push_back(boidPtr.get());
         }
 
@@ -153,8 +160,11 @@ void Application::onImguiUpdate(float deltaTime)
                         ImGui::Text("Acceleration: (%.2f, %.2f)", boid->getAcceleration().x, boid->getAcceleration().y);
                         ImGui::Text("Number of neighbors: %zu", boid->getNeighbors().size());
                         ImGui::TreePop(); // End boid node
-                        m_BoidsManager->getDraw().drawCircle(boid->getPosition(),
-                                                             m_BoidsManager->getStates().getInfluenceRadius());
+                        if (!showAllInfluenceCircle)
+                        {
+                            m_BoidsManager->getDraw().drawCircle(boid->getPosition(),
+                                                                 m_BoidsManager->getStates().getInfluenceRadius());
+                        }
                     }
                 }
                 ImGui::TreePop(); // End type group node
