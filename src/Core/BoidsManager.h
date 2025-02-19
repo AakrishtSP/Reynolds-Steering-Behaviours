@@ -31,6 +31,8 @@ public:
     void setBoids(std::vector<std::unique_ptr<Boid>> boids) { m_boid = std::move(boids); }
     void setObstacles(std::vector<std::unique_ptr<Obstacle>> obs) { m_obstacles = std::move(obs); }
 
+    void defineObstracle(glm::vec4 obs);
+
 private:
    std::vector<std::unique_ptr<Boid>> m_boid;
    std::vector<std::unique_ptr<Obstacle>> m_obstacles;
