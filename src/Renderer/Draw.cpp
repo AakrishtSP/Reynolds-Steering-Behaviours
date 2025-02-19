@@ -22,9 +22,8 @@ Draw::~Draw()
 
 struct VerticesInfo
 {
-    float x;
-    float y;
-    float z;
+    glm::vec3 position;
+    glm::vec3 color;
 };
 struct BoidVertices
 {
@@ -46,6 +45,7 @@ void Draw::init()
     m_Projection = glm::ortho(-640.0f, 640.0f, -360.0f, 360.0f);
 
     VertexBufferLayout layout;
+    layout.Push<float>(3);
     layout.Push<float>(3);
     m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 
@@ -85,32 +85,39 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids, float size)
         // A multiplier to exaggerate the wing spread for a caret wing look.
         constexpr float wingMultiplier = 1.5f; // Adjust as needed
 
+        const glm::vec3 color = boids[i]->getClusterColor();
+
         // Top tip remains at the front.
-        boidVertices[i].front_tip = {
-            position.x + facingDir.x * bodyLength,
-            position.y + facingDir.y * bodyLength,
-            0.0f
+        boidVertices[i].front_tip.position = {
+
+                position.x + facingDir.x * bodyLength,
+                position.y + facingDir.y * bodyLength,
+                0.0f
         };
+        boidVertices[i].front_tip.color = color;
 
         // Wing vertices: offset further along the perpendicular direction.
-        boidVertices[i].front_left = {
+        boidVertices[i].front_left.position = {
             position.x - facingDir.x * wingWidth + perp.x * wingWidth * wingMultiplier,
             position.y - facingDir.y * wingWidth + perp.y * wingWidth * wingMultiplier,
             0.0f
         };
+        boidVertices[i].front_left.color = color;
 
-        boidVertices[i].front_right = {
+        boidVertices[i].front_right.position = {
             position.x - facingDir.x * wingWidth - perp.x * wingWidth * wingMultiplier,
             position.y - facingDir.y * wingWidth - perp.y * wingWidth * wingMultiplier,
             0.0f
         };
+        boidVertices[i].front_right.color = color;
 
         // Back tip is centered directly behind the boid (no perpendicular offset).
-        boidVertices[i].back_tip = {
+        boidVertices[i].back_tip.position = {
             position.x + facingDir.x * tailLength,
             position.y + facingDir.y * tailLength,
             0.0f
         };
+        boidVertices[i].back_tip.color = color;
 
         // Indices for two triangles (upper: tip + wings, lower: wings + back tip)
         indices[6 * i + 0] = 4 * i + 0; // front tip
