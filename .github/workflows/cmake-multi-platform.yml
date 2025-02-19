@@ -128,7 +128,7 @@ jobs:
       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       with:
         tag_name: v1.0.${{ github.run_number }}
-        release_name: "Reynold Steering Behaviours Build ${{ github.run_number }}"
+        name: "Reynold Steering Behaviours Build ${{ github.run_number }}"
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -138,4 +138,4 @@ jobs:
       with:
         tag_name: v1.0.${{ github.run_number }}
         files: build/${{ env.ZIP_NAME }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GH_PAT }}
