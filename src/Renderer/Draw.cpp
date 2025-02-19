@@ -44,6 +44,7 @@ void Draw::init()
     m_Shader = std::make_unique<Shader>("assets/shaders/boid.glsl.vert", "assets/shaders/boid.glsl.frag");
 
     m_Projection = glm::ortho(-640.0f, 640.0f, -360.0f, 360.0f);
+    m_IndexBuffer->Bind();
 
     VertexBufferLayout layout;
     layout.Push<float>(3);
@@ -134,8 +135,6 @@ void Draw::draw(const std::vector<std::unique_ptr<Boid>>& boids, const float siz
 
     m_IndexBuffer->EditData(indices, boids.size() * 6, 0, true);
 
-    m_View = glm::translate(glm::mat4(1.0f), m_translation);
-
     const glm::mat4 mvp = m_Projection * m_View;
     m_Shader->Bind();
     m_Shader->SetUniformMat4f("u_MVP", mvp);
@@ -158,6 +157,7 @@ void Draw::setClearColor(const float r, const float g, const float b, const floa
 void Draw::setTranslation(const glm::vec2& translation)
 {
     m_translation = glm::vec3(translation, 0.0f);
+    m_View = glm::translate(glm::mat4(1.0f), m_translation);
 }
 
 void Draw::drawCircle(const glm::vec2& position, const float radius, const glm::vec3 color, const int LineWidth) const
