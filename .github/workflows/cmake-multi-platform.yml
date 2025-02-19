@@ -4,9 +4,8 @@ name: CMake on multiple platforms
 
 on:
   push:
-    branches: [ "master", "dev" ]
-  pull_request:
     branches: [ "master" ]
+
 
 jobs:
   build:
@@ -131,7 +130,7 @@ jobs:
         name: "Reynold Steering Behaviours Build ${{ github.run_number }}"
         draft: false
         prerelease: false
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GH_PAT }}
 
     - name: Upload Release Asset
       uses: softprops/action-gh-release@v2
