@@ -4,10 +4,37 @@
 
 void States::determineCluster(const std::vector<std::unique_ptr<Boid>>& boids) const
 {
-    size_t i = 0;
+    const int clusterRadius = m_infludenceRadius;
+
+    // Reset in-cluster flag for all boids before checking clusters
     for (const auto& boid : boids)
     {
-        glm::vec3 currentClusterColor = boid->getClusterColor();
+        boid->resetInCluster();
+    }
+
+    // Determine clusters and set colors
+    for (size_t i = 0; i < boids.size(); i++)
+    {
+        for (size_t j = 0; j < boids.size(); j++)
+        {
+            if (i == j) continue;
+
+            // Check if in influence radius
+            if (glm::distance(boids.at(i)->getPosition(), boids.at(j)->getPosition()) < clusterRadius)
+            {
+                boids.at(j)->setClusterColor(boids.at(i)->getClusterColor());
+                boids.at(j)->setInCluster();
+            }
+        }
+    }
+
+    // Reset color for boids that are NOT in a cluster
+    for (const auto& boid : boids)
+    {
+        if (!boid->isInCluster())
+        {
+            boid->setClusterColor(boid->getIndivisualColor());
+        }
     }
 }
 

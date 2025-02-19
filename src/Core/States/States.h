@@ -11,10 +11,10 @@ class Boid;
 class States {
 
 private:
-	float m_influenceFactor = 0.05;
+	float m_influenceFactor = 0.08;
 	float m_agentTerminalSpeed = 3.0f;
-	float m_infludenceRadius = 70;
-	float m_randomnessFactor = 0.5;
+	float m_infludenceRadius = 80;
+	float m_randomnessFactor = 0.3;
 	int m_randomnessInterval = 30;
 
 public:

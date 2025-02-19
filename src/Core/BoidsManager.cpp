@@ -36,7 +36,9 @@ void BoidsManager::update()
 void BoidsManager::addBoid(std::unique_ptr<Boid> boid)
 {
     glm::vec3 initial_color = { getRandom(0, 1)  , getRandom(0, 1), getRandom(0, 1) };
+    boid->setIndivisualColor(initial_color);
     boid->setClusterColor(initial_color);
+    boid->resetInCluster();
     m_boid.push_back(std::move(boid));
 }
 
