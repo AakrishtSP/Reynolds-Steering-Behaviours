@@ -24,7 +24,6 @@ private:
     float m_radiusOfInfluence{70.0F};
 
     glm::vec4 m_obstacleBounds{ -1280 / 2, 720 / 2, 1280 / 2, - 720 / 2 };
-    bool showAllInfluenceCircle{false};
 
     float m_influenceFactor{0.05F};
     float m_agentTerminalSpeed{3.0F};

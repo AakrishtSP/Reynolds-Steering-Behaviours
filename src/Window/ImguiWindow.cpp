@@ -63,6 +63,11 @@ void ImguiWindow::updateStart() const
 
 void ImguiWindow::updateEnd() const
 {
+    ImGui::Begin("FPS debug");
+    ImGui::Text("Current FPS: %.1f", ImGui::GetIO().Framerate);
+    ImGui::Text("Current Frame Time: %.3f ms", 1000.0f / ImGui::GetIO().Framerate);
+    ImGui::End();
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     if (m_io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
