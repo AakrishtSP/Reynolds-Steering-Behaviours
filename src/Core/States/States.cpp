@@ -97,7 +97,6 @@ void States::determineCluster(const std::vector<std::unique_ptr<Boid>>& boids) c
 
 
 
-
 void States::updateBoidsDeafult(const std::vector<std::unique_ptr<Boid>>& boids, const std::vector<std::unique_ptr<Obstacle>>& obstacles) const
 {
     determineCluster(boids);
