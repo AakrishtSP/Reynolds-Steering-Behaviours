@@ -116,10 +116,10 @@ jobs:
       shell: bash
       run: |
         if [[ "$RUNNER_OS" == "Windows" ]]; then
-        powershell -Command "Compress-Archive -Path build/build/bin -DestinationPath build/$ZIP_NAME"
+        powershell -Command "Compress-Archive -Path build/build/bin/* -DestinationPath build/$ZIP_NAME"
         else
         cd build
-        zip -r "$ZIP_NAME" build/bin
+        zip -r "$ZIP_NAME" build/bin/*
         fi
 
     - name: Create GitHub Release (if it doesn’t exist)
