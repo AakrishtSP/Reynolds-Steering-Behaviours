@@ -116,7 +116,7 @@ jobs:
       shell: bash
       run: |
         cd build
-        zip -r "$ZIP_NAME" bin
+        zip -r "$ZIP_NAME" build/build/bin
 
     - name: Create GitHub Release (if it doesn’t exist)
       id: create_release
