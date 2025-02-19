@@ -107,15 +107,27 @@ jobs:
       id: filename
       run: |
         ZIP_NAME="Reynold-Steering-Behaviours-${{ matrix.os }}-${{ matrix.c_compiler }}.zip"
-        echo "zip_name=$ZIP_NAME" >> "$GITHUB_ENV"
+        echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
 
     - name: Zip the bin folder
       run: |
         cd build
-        zip -r "$zip_name" bin
+        zip -r "$ZIP_NAME" bin
 
-    - name: Upload binary artifacts
-      uses: actions/upload-artifact@v4
+    - name: Create GitHub Release (if it doesn’t exist)
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       with:
-        name: ${{ env.zip_name }}
-        path: build/${{ env.zip_name }}
+        tag_name: v1.0.${{ github.run_number }}
+        release_name: "Reynold Steering Behaviours Build ${{ github.run_number }}"
+        draft: false
+        prerelease: false
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Release Asset
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v1.0.${{ github.run_number }}
+        files: build/${{ env.ZIP_NAME }}
+        token: ${{ secrets.GITHUB_TOKEN }}
