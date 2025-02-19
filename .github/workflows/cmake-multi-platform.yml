@@ -111,15 +111,21 @@ jobs:
         else
           echo "ZIP_NAME=Reynold-Steering-Behaviours-ubuntu-latest-${{ matrix.c_compiler }}.zip" >> "$GITHUB_ENV"
         fi
+        
+    - name: Move executable to bin folder (Windows only)
+      if: runner.os == 'Windows'
+      run: |
+        # Move the executable from Release to the bin directory on Windows
+        move build/build/bin/Release/*.exe build/build/bin/
 
     - name: Zip the bin folder
       shell: bash
       run: |
         if [[ "$RUNNER_OS" == "Windows" ]]; then
-        powershell -Command "Compress-Archive -Path build/build/bin/* -DestinationPath build/$ZIP_NAME"
+        powershell -Command "Compress-Archive -Path build/build/bin/ -DestinationPath build/$ZIP_NAME"
         else
         cd build
-        zip -r "$ZIP_NAME" build/bin/*
+        zip -r "$ZIP_NAME" build/bin/
         fi
 
     - name: Create GitHub Release (if it doesn’t exist)
