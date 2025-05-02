@@ -64,9 +64,8 @@ jobs:
       with:
         path: |
           build/
-          .git/modules/
-          external/
-        key: ${{ runner.os }}-build-${{ hashFiles('**/CMakeLists.txt', '.gitmodules') }}
+
+        key: ${{ runner.os }}-build-${{ hashFiles('**/CMakeLists.txt') }}
 
     - name: Install Dependencies on Ubuntu
       if: runner.os == 'Linux'
