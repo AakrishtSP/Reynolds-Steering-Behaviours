@@ -104,8 +104,9 @@ jobs:
 
     - name: Check if this is the main repo and on master branch
       id: release_check
+      shell: bash
       run: |
-        if [[ "${{ github.repository }}" == "your-username-or-org/your-repo-name" && "${{ github.ref }}" == "refs/heads/master" ]]; then
+        if [[ "${{ github.repository }}" == "AakrishtSP/Reynolds-Steering-Behaviours" && "${{ github.ref }}" == "refs/heads/master" ]]; then
           echo "release=true" >> $GITHUB_OUTPUT
         else
           echo "release=false" >> $GITHUB_OUTPUT
