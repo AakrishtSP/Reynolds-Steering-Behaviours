@@ -49,20 +49,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      # with:
+      #   submodules: recursive
 
     - name: Set up CMake
       uses: jwlawson/actions-setup-cmake@v2
       with:
           cmake-version: '3.30.x'
 
-    # - name: Set reusable strings
-    #   # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
-    #   id: strings
-    #   shell: bash
-    #   run: |
-    #     echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+    - name: Init submodules
+      run: git submodule update --init --recursive
+
+    - name: Restore cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          build/
+          .git/modules/
+          external/
+        key: ${{ runner.os }}-build-${{ hashFiles('**/CMakeLists.txt', '.gitmodules') }}
 
     - name: Install Dependencies on Ubuntu
       if: runner.os == 'Linux'
@@ -79,15 +84,6 @@ jobs:
             libxi-dev \
             libgl1-mesa-dev
 
-    # - name: Configure CMake
-    #   # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-    #   # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-    #   run: >
-    #     cmake -B ${{ steps.strings.outputs.build-output-dir }}
-    #     -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-    #     -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
-    #     -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-    #     -S ${{ github.workspace }}
 
     - name: Configure CMake
       run: |
@@ -127,8 +123,7 @@ jobs:
         fi
         
     - name: Move executable to bin folder (Windows only)
-      if: steps.release_check.outputs.release == 'true'
-      if: runner.os == 'Windows'
+      if: steps.release_check.outputs.release == 'true' && runner.os == 'Windows'
       run: |
         # Move the executable from Release to the bin directory on Windows
         move build/build/bin/Release/*.exe build/build/bin/
@@ -148,7 +143,6 @@ jobs:
       if: steps.release_check.outputs.release == 'true'
       id: create_release
       uses: softprops/action-gh-release@v2
-      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       with:
         tag_name: v1.0.${{ github.run_number }}
         name: "Reynold Steering Behaviours Build ${{ github.run_number }}"
