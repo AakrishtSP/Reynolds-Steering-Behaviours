@@ -1,9 +1,12 @@
 # This starter workflow is for a CMake project running on multiple platforms. There is a different starter workflow if you just want a single platform.
 # See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-single-platform.yml
-name: CMake on multiple platforms
+name: CMake Build and Release 
 
 on:
   push:
+    branches: "*"
+
+  pull_request:
     branches: [ "master" ]
 
 
@@ -35,10 +38,10 @@ jobs:
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
+        exclude:
           - os: windows-latest
             c_compiler: clang
             cpp_compiler: clang++
-        exclude:
           - os: windows-latest
             c_compiler: gcc
           - os: ubuntu-latest
@@ -103,22 +106,35 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest --build-config ${{ matrix.build_type }}
 
+
+    - name: Check if this is the main repo and on master branch
+      id: release_check
+      run: |
+        if [[ "${{ github.repository }}" == "your-username-or-org/your-repo-name" && "${{ github.ref }}" == "refs/heads/master" ]]; then
+          echo "release=true" >> $GITHUB_OUTPUT
+        else
+          echo "release=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Set Zip Filename
+      if: steps.release_check.outputs.release == 'true'
       shell: bash
       run: |
         if [[ "$RUNNER_OS" == "Windows" ]]; then
-          echo "ZIP_NAME=Reynold-Steering-Behaviours-windows-latest-${{ matrix.c_compiler }}.zip" >> "$GITHUB_ENV"
+          echo "ZIP_NAME=Reynold_Steering_Behaviours_windows_latest_${{ matrix.c_compiler }}_amd64.zip" >> "$GITHUB_ENV"
         else
-          echo "ZIP_NAME=Reynold-Steering-Behaviours-ubuntu-latest-${{ matrix.c_compiler }}.zip" >> "$GITHUB_ENV"
+          echo "ZIP_NAME=Reynold_Steering_Behaviours_linux_latest_${{ matrix.c_compiler }}_amd64.zip" >> "$GITHUB_ENV"
         fi
         
     - name: Move executable to bin folder (Windows only)
+      if: steps.release_check.outputs.release == 'true'
       if: runner.os == 'Windows'
       run: |
         # Move the executable from Release to the bin directory on Windows
         move build/build/bin/Release/*.exe build/build/bin/
 
     - name: Zip the bin folder
+      if: steps.release_check.outputs.release == 'true'
       shell: bash
       run: |
         if [[ "$RUNNER_OS" == "Windows" ]]; then
@@ -128,7 +144,8 @@ jobs:
         zip -r "$ZIP_NAME" build/bin/
         fi
 
-    - name: Create GitHub Release (if it doesn’t exist)
+    - name: Create GitHub Release (if it doesn't exist)
+      if: steps.release_check.outputs.release == 'true'
       id: create_release
       uses: softprops/action-gh-release@v2
       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -140,6 +157,7 @@ jobs:
         token: ${{ secrets.GH_PAT }}
 
     - name: Upload Release Asset
+      if: steps.release_check.outputs.release == 'true'
       uses: softprops/action-gh-release@v2
       with:
         tag_name: v1.0.${{ github.run_number }}
