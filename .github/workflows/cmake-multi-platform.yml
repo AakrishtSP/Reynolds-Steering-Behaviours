@@ -142,7 +142,7 @@ jobs:
         
     - name: Check if GitHub Release already exists
       id: check_release
-      if: env.create_release == 'true'
+      if: steps.release_check.outputs.release == 'true'
       shell: bash
       run: |
         REPO="AakrishtSP/Reynolds-Steering-Behaviours"
@@ -158,7 +158,7 @@ jobs:
         fi
 
     - name: Create GitHub Release (if it doesn't exist)
-      if: env.create_release == 'true'
+      if: steps.release_check.outputs.release == 'true'
       id: create_release
       uses: softprops/action-gh-release@v2
       with:
@@ -169,7 +169,7 @@ jobs:
         token: ${{ secrets.GH_PAT }}
 
     - name: Upload Release Asset
-      if: env.create_release == 'true'
+      if: steps.release_check.outputs.release == 'true'
       uses: softprops/action-gh-release@v2
       with:
         tag_name: v1.0.${{ github.run_number }}-${{ github.sha }}
