@@ -123,9 +123,10 @@ jobs:
         
     - name: Move executable to bin folder (Windows only)
       if: steps.release_check.outputs.release == 'true' && runner.os == 'Windows'
+      shell: bash
       run: |
         # Move the executable from Release to the bin directory on Windows
-        move build/build/bin/Release/*.exe build/build/bin/
+        mv -f build/build/bin/Release/*.exe build/build/bin/
 
     - name: Zip the bin folder
       if: steps.release_check.outputs.release == 'true'
