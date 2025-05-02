@@ -139,21 +139,39 @@ jobs:
         zip -r "$ZIP_NAME" build/bin/
         fi
 
+        
+    - name: Check if GitHub Release already exists
+      id: check_release
+      if: env.create_release == 'true'
+      shell: bash
+      run: |
+        REPO="AakrishtSP/Reynolds-Steering-Behaviours"
+        TAG_NAME="v1.0.${{ github.run_number }}-${{ github.sha | substring(0, 7) }}"
+        RELEASE_EXISTS=$(curl -s --header "Authorization: token ${{ secrets.GH_PAT }}" \
+          "https://api.github.com/repos/$REPO/releases/tags/$TAG_NAME")
+        if [[ "$RELEASE_EXISTS" == *"Not Found"* ]]; then
+          echo "Release does not exist. Proceeding with release creation."
+          echo "create_release=true" >> $GITHUB_ENV
+        else
+          echo "Release already exists. Skipping release creation."
+          echo "create_release=false" >> $GITHUB_ENV
+        fi
+
     - name: Create GitHub Release (if it doesn't exist)
-      if: steps.release_check.outputs.release == 'true'
+      if: env.create_release == 'true'
       id: create_release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v1.0.${{ github.run_number }}
+        tag_name: v1.0.${{ github.run_number }}-${{ github.sha | substring(0, 7) }}
         name: "Reynold Steering Behaviours Build ${{ github.run_number }}"
         draft: false
         prerelease: false
         token: ${{ secrets.GH_PAT }}
 
     - name: Upload Release Asset
-      if: steps.release_check.outputs.release == 'true'
+      if: env.create_release == 'true'
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v1.0.${{ github.run_number }}
+        tag_name: v1.0.${{ github.run_number }}-${{ github.sha | substring(0, 7) }}
         files: build/${{ env.ZIP_NAME }}
         token: ${{ secrets.GH_PAT }}
